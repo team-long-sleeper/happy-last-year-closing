@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .bg-primary-diamond-gradient {
+    background-image: radial-gradient(
+      circle at center,
+      var(--color-primary) 20%,
+      var(--color-secondary) 90%
+    );
+  }
+}
