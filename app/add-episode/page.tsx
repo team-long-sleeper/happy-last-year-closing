@@ -1,39 +1,36 @@
+'use client';
 import Icon from '@/components/common/Icon';
 import Header from '@/components/title/Header';
-import BookmarkIcon from '../../assets/icons/bookmark.svg';
-import CalendarIcon from '../../assets/icons/calendar_today.svg';
-import ImageIcon from '../../assets/icons/image.svg';
-import AddIcon from '../../assets/icons/add.svg';
+import BookmarkIcon from '@assets/icons/bookmark.svg';
+import CalendarIcon from '@assets/icons/calendar_today.svg';
+import PlaceIcon from '@assets/icons/place.svg';
+import DateInput from '@/components/common/DateInput';
+import AddImage from '@/components/add-eposide/AddImage';
 
 export default function AddEpisode() {
   return (
-    <div className="border-2 border-red-200 h-dvh">
+    <div className="h-dvh">
       <Header title="에피소드 추가하기" />
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
         <Icon src={BookmarkIcon} size="m" content="에피소드 제목" />
         <input
-          className="border-red-500 w-full placeholder:opacity-25 placeholder:text-primary outline-none text-text-default"
-          placeholder="에피소드 제목을 입력하세요."
+          className="text-2xl w-full placeholder:opacity-25 placeholder:text-primary outline-none text-text-default"
+          placeholder="에피소드 제목"
         />
       </div>
 
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
         <Icon src={CalendarIcon} size="m" content="에피소드 날짜" />
-        <input
-          className="border-red-500 w-full placeholder:opacity-25 placeholder:text-primary outline-none text-text-default"
-          placeholder="에피소드 날짜를 선택하세요."
-        />
+        <DateInput />
+      </div>
+
+      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
+        <Icon src={PlaceIcon} size="m" content="에피소드 장소" />
+        <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
       </div>
 
       <div className="gap-4 pl-18.75 pr-5 pb-12">
-        <span className="text-3xl font-extralight text-primary">0/4</span>
-        <div className="flex items-start gap-4 ">
-          <Icon src={ImageIcon} size="m" content="에피소드 사진" />
-
-          <div className="bg-primary size-26.5 flex items-center justify-center">
-            <Icon src={AddIcon} size="m" content="에피소드 사진 추가" />
-          </div>
-        </div>
+        <AddImage />
       </div>
     </div>
   );
