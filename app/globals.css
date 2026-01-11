@@ -8,4 +8,5 @@ body {
   color: var(--foreground);
   font-family: 'Happy', system-ui, sans-serif;
   font-size: 16px;
+  word-break: keep-all;
 }
