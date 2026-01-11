@@ -28,5 +28,8 @@
   --text-body-m--line-height: 1.5;
   --text-body-m--font-weight: 400;
 
+  --text-en-36: 27px;
+  --text-en-36--line-height: 36px;
+
   --font-sans: 'Josefin-Slab', 'Orbit', system-ui, sans-serif;
 }
