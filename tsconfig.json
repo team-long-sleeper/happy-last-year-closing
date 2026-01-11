@@ -19,6 +19,8 @@
       }
     ],
     "paths": {
+      "@assets/*": ["./assets/*"],
+      "@compnents/*": ["./components/*"],
       "@/*": ["./*"]
     }
   },

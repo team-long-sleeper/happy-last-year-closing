@@ -5,7 +5,7 @@ interface TitleProps {
 export default function ServiceTitle({ titleColor }: TitleProps) {
   return (
     <div
-      className={`px-5 flex justify-between w-full  ${titleColor} text-4xl font-extralight transform-all duration-300 ease-in-out`}
+      className={`px-5 flex justify-between w-full  ${titleColor} text-en-36 font-extralight transform-all duration-300 ease-in-out`}
     >
       <div className="-rotate-10 -translate-y-4">happy</div>
       <div className="">last</div>
