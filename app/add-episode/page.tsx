@@ -1,13 +1,61 @@
-'use client';
-import Icon from '@/components/common/Icon';
-import Header from '@/components/title/Header';
-import BookmarkIcon from '@assets/icons/bookmark.svg';
-import CalendarIcon from '@assets/icons/calendar_today.svg';
-import PlaceIcon from '@assets/icons/place.svg';
-import DateInput from '@/components/common/DateInput';
-import AddImage from '@/components/add-eposide/AddImage';
+"use client";
+import Icon from "@/components/common/Icon";
+import Header from "@/components/title/Header";
+import BookmarkIcon from "@assets/icons/bookmark.svg";
+import CalendarIcon from "@assets/icons/calendar_today.svg";
+import PlaceIcon from "@assets/icons/place.svg";
+import DateInput, { formatSingleDate } from "@/components/common/DateInput";
+import AddImage from "@/components/add-eposide/AddImage";
+import useImageMetaData from "@/stores/imageMetaDataStore";
+import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
+import { useState } from "react";
 
 export default function AddEpisode() {
+  const [selectedDate, setSelectedDate] = useState<{
+    from: number;
+    to: number;
+  } | null>(null);
+  const { dates } = useImageMetaData();
+  const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
+
+  const onHandleClickRecommendDate = (date: Date, index: number) => {
+    if (!selectedDate) {
+      setEpisodeDate({ from: date, to: date });
+      setSelectedDate({ from: index, to: index });
+      return;
+    }
+
+    if (!episodeDate || !episodeDate.from || !episodeDate.to) return;
+
+    const isSingle = selectedDate.from === selectedDate.to;
+    const isSameSingleClick = isSingle && index === selectedDate.from;
+    const isClickFromEdge = index === selectedDate.from;
+    const isClickToEdge = index === selectedDate.to;
+
+    let nextDates: { from: Date; to: Date } | null = null;
+    let nextSelected: { from: number; to: number } | null = null;
+
+    if (isSameSingleClick) {
+      nextDates = null;
+      nextSelected = null;
+    } else if (isClickFromEdge) {
+      nextDates = { from: episodeDate.to, to: episodeDate.to };
+      nextSelected = { from: selectedDate.to, to: selectedDate.to };
+    } else if (isClickToEdge) {
+      nextDates = { from: episodeDate.from, to: episodeDate.from };
+      nextSelected = { from: selectedDate.from, to: selectedDate.from };
+    } else if (episodeDate.from < date) {
+      nextDates = { from: episodeDate.from, to: date };
+      nextSelected = { from: selectedDate.from, to: index };
+    } else {
+      nextDates = { from: date, to: episodeDate.to };
+      nextSelected = { from: index, to: selectedDate.to };
+    }
+
+    setEpisodeDate(nextDates);
+    setSelectedDate(nextSelected);
+  };
+
   return (
     <div className="h-dvh">
       <Header title="에피소드 추가하기" />
@@ -19,17 +67,41 @@ export default function AddEpisode() {
         />
       </div>
 
-      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
-        <Icon src={CalendarIcon} size="m" content="에피소드 날짜" />
-        <DateInput />
+      <div className="flex items-center gap-4 flex-col  pb-12">
+        <div className="w-full flex h-fit items-center gap-4 pl-25.5">
+          <Icon src={CalendarIcon} size="m" content="에피소드 날짜" />
+
+          <DateInput />
+        </div>
+
+        {dates.length > 0 && (
+          <div className="w-full gap-1 flex  pl-35.5 overflow-y-scroll">
+            {dates.map((date, index) => {
+              const recommand = formatSingleDate(date);
+              return (
+                <div
+                  onClick={() => onHandleClickRecommendDate(date, index)}
+                  key={index}
+                  className={`w-fit text-sm text-gray-600 border border-primary rounded-2xl px-3 py-1 whitespace-nowrap shrink-0 ${
+                    selectedDate?.from === index || selectedDate?.to === index
+                      ? "bg-primary text-white"
+                      : ""
+                  }`}
+                >
+                  {recommand}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
+      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
         <Icon src={PlaceIcon} size="m" content="에피소드 장소" />
         <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
       </div>
 
-      <div className="gap-4 pl-18.75 pr-5 pb-12">
+      <div className="gap-4">
         <AddImage />
       </div>
     </div>

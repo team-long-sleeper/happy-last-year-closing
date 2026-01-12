@@ -1,18 +1,22 @@
-'use client';
-import AddIcon from '@assets/icons/add.svg';
-import { useRef, useState } from 'react';
-import Icon from '../common/Icon';
-import * as exifr from 'exifr';
-import { ImageMetaData, UploadedImage } from '@/types/episode.types';
+"use client";
+import AddIcon from "@assets/icons/add.svg";
+import { useRef } from "react";
+import Icon from "../common/Icon";
+import * as exifr from "exifr";
+import { UploadedImage } from "@/types/episode.types";
+import useImageMetaData from "@/stores/imageMetaDataStore";
+import { set } from "date-fns";
 
 interface ImageUploaderProps {
   images: UploadedImage[] | null;
   setImages: (file: UploadedImage[]) => void;
 }
 
-export default function ImageUploader({ images, setImages }: ImageUploaderProps) {
-  const [meta, setMeta] = useState<ImageMetaData | null>(null);
-  const [isheic, setIsHeic] = useState<string>('');
+export default function ImageUploader({
+  images,
+  setImages,
+}: ImageUploaderProps) {
+  const { setDate, setplaces } = useImageMetaData();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onClickUpload = () => {
@@ -33,18 +37,18 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
   const handleFiles = async (fileList: FileList) => {
     const uploadedImages = await Promise.all(
       Array.from(fileList).map(async (file) => {
-        if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
-          const { default: heic2any } = await import('heic2any');
+        if (file.type === "image/heic" || file.name.endsWith(".heic")) {
+          const { default: heic2any } = await import("heic2any");
           const convertedBlob = await heic2any({
             blob: file,
-            toType: 'image/jpeg',
+            toType: "image/jpeg",
             quality: 0.9,
           });
 
           const convertedFile = new File(
             [convertedBlob as Blob],
-            file.name.replace(/\.heic$/i, '.jpg'),
-            { type: 'image/jpeg' }
+            file.name.replace(/\.heic$/i, ".jpg"),
+            { type: "image/jpeg" }
           );
 
           return {
@@ -80,22 +84,27 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
       gps: true,
     });
 
-    const date = data?.DateTimeOriginal || data?.CreateDate || data?.ModifyDate || null;
+    const date =
+      data?.DateTimeOriginal ||
+      data?.CreateDate ||
+      data?.ModifyDate ||
+      new Date(file.lastModified) ||
+      null;
 
     const gps =
-      data?.latitude && data?.longitude ? { lat: data.latitude, lng: data.longitude } : null;
+      data?.latitude && data?.longitude
+        ? { lat: data.latitude, lng: data.longitude }
+        : null;
 
-    console.log('file', file);
-    console.log('date', date);
-    console.log('gps', gps);
-    setMeta({ date, gps, raw: data });
+    if (date) setDate(date);
+    if (gps) setplaces(gps);
   };
 
   return (
-    <>
+    <div className="size-26.5">
       <div
         onClick={onClickUpload}
-        className="bg-primary size-26.5 flex items-center justify-center"
+        className="bg-primary size-26.5 h-full flex items-center justify-center "
       >
         <Icon src={AddIcon} size="m" content="에피소드 사진 추가" />
       </div>
@@ -109,10 +118,6 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
         onChange={onChangeFile}
         className="hidden"
       />
-
-      <pre className="text-xs whitespace-pre-wrap"></pre>
-      {`${meta?.gps?.lat} ${meta?.gps?.lng}`}
-      {`${meta?.date}`}
-    </>
+    </div>
   );
 }
