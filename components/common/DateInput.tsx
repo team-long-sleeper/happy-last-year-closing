@@ -10,8 +10,18 @@ type InputProps = {
   placeholder?: string;
 };
 
-export function formatSingleDate(date: Date) {
-  return format(date, "MMMMMMM dd", { locale: enUS });
+export const DATE_FORMAT = {
+  display: "MMMMMM dd",
+  number: "MM/dd",
+} as const;
+
+export type DateFormatKey = keyof typeof DATE_FORMAT;
+
+export function formatSingleDate(
+  date: Date,
+  formatKey: DateFormatKey = "display"
+) {
+  return format(date, DATE_FORMAT[formatKey], { locale: enUS });
 }
 
 export function checkDateRange(dateRange: DateRange) {
@@ -47,6 +57,7 @@ export default function DateInput({
   }
 
   const display = date ? checkDateRange(date) : undefined;
+  const defaultMonth = date?.from ?? new Date(2025, 0);
 
   return (
     <div className="flex flex-col">
@@ -73,10 +84,14 @@ export default function DateInput({
           </button>
 
           {open && (
-            <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/20">
+            <div
+              onClick={onBlurDatePicker}
+              className="fixed inset-0 z-40 flex items-center justify-center bg-black/20"
+            >
               <div
                 role="dialog"
                 aria-label="Date picker"
+                onClick={(e) => e.stopPropagation()}
                 className="fixed z-50 mt-2 bg-white p-3 shadow-lg border  "
               >
                 <DayPicker
@@ -84,15 +99,14 @@ export default function DateInput({
                   locale={enUS}
                   selected={date || undefined}
                   autoFocus
+                  hideNavigation
                   onSelect={(d) => {
                     if (d) {
                       setDate(d);
                     }
                   }}
-                  hideNavigation
-                  startMonth={new Date(2025, 0)}
-                  endMonth={new Date(2025, 11)}
-                  captionLayout="dropdown-months"
+                  defaultMonth={defaultMonth}
+                  captionLayout="dropdown"
                   formatters={{
                     formatWeekdayName: (weekday, options) => {
                       return format(weekday, "EEEEE", options);
@@ -103,24 +117,27 @@ export default function DateInput({
                     table: "w-full border-collapse mt-2",
                     head_row: "flex border!",
 
-                    day: "rounded-full w-10 h-10 hover:bg-primary text-center",
+                    day: "w-10 h-10 hover:bg-primary text-center",
                     day_selected:
                       "bg-black text-white hover:bg-black focus:bg-black",
                     day_today: "border border-zinc-300 ",
                     day_button:
-                      "rounded-full w-full h-full hover:cursor-pointer hover:text-white",
-                    day_outside: "text-zinc-300 bg-black border",
+                      " w-full h-full hover:cursor-pointer hover:text-white",
+                    day_outside: "text-zinc-300 bg-white!",
+                    nav: "w-full flex justify-between",
+                    button_next: "hover:fill-primary hover:cursor-pointer",
+                    button_previous: "hover:fill-primary hover:cursor-pointer",
                     months_dropdown:
                       "focus:outline-none text-center hover:cursor-pointer",
                     caption_label: "hidden",
-                    dropdowns: "flex justify-center items-center p-2 text-lg",
-                    years_dropdown: "hidden",
-                    month_caption: "",
+                    dropdowns:
+                      "flex justify-center items-center p-2 text-lg flex-row-reverse",
 
+                    disabled: "border",
                     range_middle: "bg-primary text-white",
                     range_start: "bg-primary text-white font-bold",
                     range_end: "bg-primary text-white font-bold",
-                    hidden: "hover:bg-white",
+                    hidden: "hover:bg-white bg-white",
                     weekdays: "text-xs",
                     weeks: "mt-4",
                   }}

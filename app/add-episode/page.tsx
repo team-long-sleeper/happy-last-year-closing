@@ -77,7 +77,7 @@ export default function AddEpisode() {
         {dates.length > 0 && (
           <div className="w-full gap-1 flex  pl-35.5 overflow-y-scroll">
             {dates.map((date, index) => {
-              const recommand = formatSingleDate(date);
+              const recommand = formatSingleDate(date, "number");
               return (
                 <div
                   onClick={() => onHandleClickRecommendDate(date, index)}
