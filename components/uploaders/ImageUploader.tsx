@@ -1,9 +1,9 @@
 "use client";
-import AddIcon from "@assets/icons/add.svg";
 import { useRef } from "react";
 import Icon from "../common/Icon";
 import * as exifr from "exifr";
 import { UploadedImage } from "@/types/episode.types";
+import { AddIcon } from "@assets/icons";
 import useImageMetaData from "@/stores/imageMetaDataStore";
 
 interface ImageUploaderProps {
@@ -104,7 +104,7 @@ export default function ImageUploader({
     <div className="size-26.5">
       <div
         onClick={onClickUpload}
-        className="bg-primary size-26.5 h-full flex items-center justify-center "
+        className="bg-primary size-26.5 h-full flex items-center justify-center cursor-pointer"
       >
         <Icon src={AddIcon} size="m" content="에피소드 사진 추가" />
       </div>

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Icon from "../common/Icon";
 import ImageUploader from "../uploaders/ImageUploader";
-import ImageIcon from "@assets/icons/image.svg";
 import Image from "next/image";
+import { ImageIcon } from "@assets/icons";
 import { UploadedImage } from "@/types/episode.types";
 
 export default function AddImage() {
