@@ -26,7 +26,7 @@ export default function AddImage() {
                   width={106}
                   height={106}
                   src={image.preview}
-                  className="size-26.5 object-cover shrink-0"
+                  className="size-26.5 object-cover shrink-0 border border-primary"
                   key={index}
                   alt={image.name}
                 />
