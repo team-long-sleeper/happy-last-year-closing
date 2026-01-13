@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Icon from '../common/Icon';
-import GoBackIcon from '../../assets/icons/arrow_back_ios.svg';
+import GoBackIcon from '@assets/icons/arrow_back_ios.svg';
 
 interface HeaderProps {
   title: string;
