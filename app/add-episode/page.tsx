@@ -5,7 +5,13 @@ import DateInput, { formatSingleDate } from "@/components/common/DateInput";
 import AddImage from "@/components/add-eposide/AddImage";
 import useImageMetaData from "@/stores/imageMetaDataStore";
 import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
-import { BookmarkIcon, CalendarIcon, PlaceIcon } from "@assets/icons";
+import {
+  BookmarkIcon,
+  CalendarIcon,
+  PlaceIcon,
+  MateIcon,
+  AddIcon,
+} from "@assets/icons";
 import { isSameDay } from "date-fns";
 
 export default function AddEpisode() {
@@ -89,9 +95,19 @@ export default function AddEpisode() {
         <AddImage />
       </div>
 
-      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
-        <Icon src={PlaceIcon} size="m" content="에피소드 장소" />
-        <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
+      <div className="flex items-center gap-4 flex-col w-full">
+        <div className="w-full">
+          <span className="text-3xl font-extralight text-primary pl-26 text-right">
+            0
+          </span>
+        </div>
+
+        <div className="w-full flex items-start gap-4 pl-25.5">
+          <Icon src={MateIcon} size="m" content="에피소드 친구" />
+          <div className="size-17 bg-primary flex justify-center items-center rounded-full">
+            <Icon src={AddIcon} size="m" content="친구 추가하기" />
+          </div>
+        </div>
       </div>
     </div>
   );
