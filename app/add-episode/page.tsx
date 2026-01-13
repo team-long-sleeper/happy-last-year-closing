@@ -8,52 +8,37 @@ import DateInput, { formatSingleDate } from "@/components/common/DateInput";
 import AddImage from "@/components/add-eposide/AddImage";
 import useImageMetaData from "@/stores/imageMetaDataStore";
 import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
-import { useState } from "react";
+import { isSameDay } from "date-fns";
 
 export default function AddEpisode() {
-  const [selectedDate, setSelectedDate] = useState<{
-    from: number;
-    to: number;
-  } | null>(null);
   const { dates } = useImageMetaData();
   const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
 
-  const onHandleClickRecommendDate = (date: Date, index: number) => {
-    if (!selectedDate) {
-      setEpisodeDate({ from: date, to: date });
-      setSelectedDate({ from: index, to: index });
-      return;
+  const onHandleClickRecommendDate = (date: Date) => {
+    if (!episodeDate || !episodeDate.from || !episodeDate.to) {
+      return setEpisodeDate({ from: date, to: date });
     }
 
-    if (!episodeDate || !episodeDate.from || !episodeDate.to) return;
-
-    const isSingle = selectedDate.from === selectedDate.to;
-    const isSameSingleClick = isSingle && index === selectedDate.from;
-    const isClickFromEdge = index === selectedDate.from;
-    const isClickToEdge = index === selectedDate.to;
+    const isSameSingleClick =
+      isSameDay(date, episodeDate.from) && isSameDay(date, episodeDate.to);
+    const selectFromEdge = isSameDay(date, episodeDate.from);
+    const selectToEdge = isSameDay(date, episodeDate.to);
 
     let nextDates: { from: Date; to: Date } | null = null;
-    let nextSelected: { from: number; to: number } | null = null;
 
     if (isSameSingleClick) {
       nextDates = null;
-      nextSelected = null;
-    } else if (isClickFromEdge) {
+    } else if (selectFromEdge) {
       nextDates = { from: episodeDate.to, to: episodeDate.to };
-      nextSelected = { from: selectedDate.to, to: selectedDate.to };
-    } else if (isClickToEdge) {
+    } else if (selectToEdge) {
       nextDates = { from: episodeDate.from, to: episodeDate.from };
-      nextSelected = { from: selectedDate.from, to: selectedDate.from };
     } else if (episodeDate.from < date) {
       nextDates = { from: episodeDate.from, to: date };
-      nextSelected = { from: selectedDate.from, to: index };
     } else {
       nextDates = { from: date, to: episodeDate.to };
-      nextSelected = { from: index, to: selectedDate.to };
     }
 
     setEpisodeDate(nextDates);
-    setSelectedDate(nextSelected);
   };
 
   return (
@@ -80,10 +65,11 @@ export default function AddEpisode() {
               const recommand = formatSingleDate(date, "number");
               return (
                 <div
-                  onClick={() => onHandleClickRecommendDate(date, index)}
+                  onClick={() => onHandleClickRecommendDate(date)}
                   key={index}
                   className={`w-fit text-sm text-gray-600 border border-primary rounded-2xl px-3 py-1 whitespace-nowrap shrink-0 ${
-                    selectedDate?.from === index || selectedDate?.to === index
+                    (episodeDate?.from && isSameDay(date, episodeDate.from)) ||
+                    (episodeDate?.to && isSameDay(date, episodeDate.to))
                       ? "bg-primary text-white"
                       : ""
                   }`}
