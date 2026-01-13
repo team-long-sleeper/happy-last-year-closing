@@ -1,13 +1,11 @@
 "use client";
 import Icon from "@/components/common/Icon";
 import Header from "@/components/title/Header";
-import BookmarkIcon from "@assets/icons/bookmark.svg";
-import CalendarIcon from "@assets/icons/calendar_today.svg";
-import PlaceIcon from "@assets/icons/place.svg";
 import DateInput, { formatSingleDate } from "@/components/common/DateInput";
 import AddImage from "@/components/add-eposide/AddImage";
 import useImageMetaData from "@/stores/imageMetaDataStore";
 import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
+import { BookmarkIcon, CalendarIcon, PlaceIcon } from "@assets/icons";
 import { isSameDay } from "date-fns";
 
 export default function AddEpisode() {
@@ -89,6 +87,11 @@ export default function AddEpisode() {
 
       <div className="gap-4">
         <AddImage />
+      </div>
+
+      <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
+        <Icon src={PlaceIcon} size="m" content="에피소드 장소" />
+        <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
       </div>
     </div>
   );

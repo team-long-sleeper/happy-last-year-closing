@@ -1,9 +1,9 @@
 "use client";
-import AddIcon from "@assets/icons/add.svg";
 import { useRef } from "react";
 import Icon from "../common/Icon";
 import * as exifr from "exifr";
 import { UploadedImage } from "@/types/episode.types";
+import { AddIcon } from "@assets/icons";
 import useImageMetaData from "@/stores/imageMetaDataStore";
 
 interface ImageUploaderProps {
