@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import { enUS } from "date-fns/locale";
@@ -28,7 +28,7 @@ export function checkDateRange(dateRange: DateRange) {
   const { from, to } = dateRange;
   if (!from || !to) return undefined;
 
-  const isSingleDate = from.getTime() === to.getTime();
+  const isSingleDate = isSameDay(from, to);
 
   if (isSingleDate) return formatSingleDate(from);
   else return `${formatSingleDate(from)} ~ ${formatSingleDate(to)}`;
@@ -52,9 +52,13 @@ export default function DateInput({
     };
   }, []);
 
-  function onBlurDatePicker() {
+  const onBlurDatePicker = () => {
     setOpen(false);
-  }
+  };
+
+  const onClickClear = () => {
+    setDate(null);
+  };
 
   const display = date ? checkDateRange(date) : undefined;
   const defaultMonth = date?.from ?? new Date(2025, 0);
@@ -116,7 +120,6 @@ export default function DateInput({
                     month: "space-y-3",
                     table: "w-full border-collapse mt-2",
                     head_row: "flex border!",
-
                     day: "w-10 h-10 hover:bg-primary text-center",
                     day_selected:
                       "bg-black text-white hover:bg-black focus:bg-black",
@@ -132,7 +135,6 @@ export default function DateInput({
                     caption_label: "hidden",
                     dropdowns:
                       "flex justify-center items-center p-2 text-lg flex-row-reverse",
-
                     disabled: "border",
                     range_middle: "bg-primary text-white",
                     range_start: "bg-primary text-white font-bold",
@@ -147,6 +149,7 @@ export default function DateInput({
                   <button
                     type="button"
                     className="text-sm text-zinc-600 hover:text-zinc-900"
+                    onClick={onClickClear}
                   >
                     Clear
                   </button>

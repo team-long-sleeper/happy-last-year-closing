@@ -5,7 +5,6 @@ import Icon from "../common/Icon";
 import * as exifr from "exifr";
 import { UploadedImage } from "@/types/episode.types";
 import useImageMetaData from "@/stores/imageMetaDataStore";
-import { set } from "date-fns";
 
 interface ImageUploaderProps {
   images: UploadedImage[] | null;
@@ -74,17 +73,13 @@ export default function ImageUploader({
   };
 
   const extractMetadata = async (file: File) => {
-    // 날짜 위치 추출
-    // 날짜 있으면 전역 스토어에 날짜 넣기
-    // 위치 있으면 전역 스토어에 위치 넣기
-
     const data = await exifr.parse(file, {
       tiff: true,
       exif: true,
       gps: true,
     });
 
-    const date =
+    const date: Date | null | undefined =
       data?.DateTimeOriginal ||
       data?.CreateDate ||
       data?.ModifyDate ||
@@ -96,7 +91,12 @@ export default function ImageUploader({
         ? { lat: data.latitude, lng: data.longitude }
         : null;
 
-    if (date) setDate(date);
+    if (date) {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      setDate(d);
+    }
+
     if (gps) setplaces(gps);
   };
 

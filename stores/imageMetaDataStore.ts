@@ -1,4 +1,4 @@
-import { DateRange } from "react-day-picker";
+import { isSameDay } from "date-fns";
 import { create } from "zustand";
 
 type MetaDataState = {
@@ -23,7 +23,7 @@ const useImageMetaData = create<MetaDataState & MeataDataStateAction>(
     setDate: (date: Date) =>
       set((state) => {
         if (state.dates) {
-          const newDates = state.dates.find((d) => d === date)
+          const newDates = state.dates.find((d) => isSameDay(d, date))
             ? state.dates
             : [...state.dates, date];
           return { dates: newDates };
