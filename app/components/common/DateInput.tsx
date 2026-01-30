@@ -1,26 +1,23 @@
-"use client";
+'use client';
 
-import { format, isSameDay } from "date-fns";
-import { useEffect, useRef, useState } from "react";
-import { DateRange, DayPicker } from "react-day-picker";
-import { enUS } from "date-fns/locale";
-import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
+import { format, isSameDay } from 'date-fns';
+import { useEffect, useRef, useState } from 'react';
+import { DateRange, DayPicker } from 'react-day-picker';
+import { enUS } from 'date-fns/locale';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
 type InputProps = {
   placeholder?: string;
 };
 
 export const DATE_FORMAT = {
-  display: "MMMMMM dd",
-  number: "MM/dd",
+  display: 'MMMMMM dd',
+  number: 'MM/dd',
 } as const;
 
 export type DateFormatKey = keyof typeof DATE_FORMAT;
 
-export function formatSingleDate(
-  date: Date,
-  formatKey: DateFormatKey = "display"
-) {
+export function formatSingleDate(date: Date, formatKey: DateFormatKey = 'display') {
   return format(date, DATE_FORMAT[formatKey], { locale: enUS });
 }
 
@@ -34,21 +31,19 @@ export function checkDateRange(dateRange: DateRange) {
   else return `${formatSingleDate(from)} ~ ${formatSingleDate(to)}`;
 }
 
-export default function DateInput({
-  placeholder = "에피소드 날짜",
-}: InputProps) {
+export default function DateInput({ placeholder = '에피소드 날짜' }: InputProps) {
   const [open, setOpen] = useState(false);
   const { date, setDate } = useEpisodeDataStore();
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === 'Escape') setOpen(false);
     }
 
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
@@ -65,24 +60,20 @@ export default function DateInput({
 
   return (
     <div className="flex flex-col">
-      <div ref={ref} className="  w-full max-w-xs">
+      <div ref={ref} className=" w-full">
         <div>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             className={[
-              "w-full text-left",
-              "flex items-center justify-between gap-2",
-              "focus:outline-none",
-            ].join(" ")}
+              'w-full text-left',
+              'flex items-center justify-between gap-2',
+              'focus:outline-none',
+            ].join(' ')}
             aria-haspopup="dialog"
             aria-expanded={open}
           >
-            <span
-              className={`text-primary text-2xl ${
-                date ? "text-text-default" : "opacity-25"
-              }`}
-            >
+            <span className={`text-primary text-2xl ${date ? 'text-text-default' : 'opacity-25'}`}>
               {display || placeholder}
             </span>
           </button>
@@ -113,35 +104,31 @@ export default function DateInput({
                   captionLayout="dropdown"
                   formatters={{
                     formatWeekdayName: (weekday, options) => {
-                      return format(weekday, "EEEEE", options);
+                      return format(weekday, 'EEEEE', options);
                     },
                   }}
                   classNames={{
-                    month: "space-y-3",
-                    table: "w-full border-collapse mt-2",
-                    head_row: "flex border!",
-                    day: "w-10 h-10 hover:bg-primary text-center",
-                    day_selected:
-                      "bg-black text-white hover:bg-black focus:bg-black",
-                    day_today: "border border-zinc-300 ",
-                    day_button:
-                      " w-full h-full hover:cursor-pointer hover:text-white",
-                    day_outside: "text-zinc-300 bg-white!",
-                    nav: "w-full flex justify-between",
-                    button_next: "hover:fill-primary hover:cursor-pointer",
-                    button_previous: "hover:fill-primary hover:cursor-pointer",
-                    months_dropdown:
-                      "focus:outline-none text-center hover:cursor-pointer",
-                    caption_label: "hidden",
-                    dropdowns:
-                      "flex justify-center items-center p-2 text-lg flex-row-reverse",
-                    disabled: "border",
-                    range_middle: "bg-primary text-white",
-                    range_start: "bg-primary text-white font-bold",
-                    range_end: "bg-primary text-white font-bold",
-                    hidden: "hover:bg-white bg-white",
-                    weekdays: "text-xs",
-                    weeks: "mt-4",
+                    month: 'space-y-3',
+                    table: 'w-full border-collapse mt-2',
+                    head_row: 'flex border!',
+                    day: 'w-10 h-10 hover:bg-primary text-center',
+                    day_selected: 'bg-black text-white hover:bg-black focus:bg-black',
+                    day_today: 'border border-zinc-300 ',
+                    day_button: ' w-full h-full hover:cursor-pointer hover:text-white',
+                    day_outside: 'text-zinc-300 bg-white!',
+                    nav: 'w-full flex justify-between',
+                    button_next: 'hover:fill-primary hover:cursor-pointer',
+                    button_previous: 'hover:fill-primary hover:cursor-pointer',
+                    months_dropdown: 'focus:outline-none text-center hover:cursor-pointer',
+                    caption_label: 'hidden',
+                    dropdowns: 'flex justify-center items-center p-2 text-lg flex-row-reverse',
+                    disabled: 'border',
+                    range_middle: 'bg-primary text-white',
+                    range_start: 'bg-primary text-white font-bold',
+                    range_end: 'bg-primary text-white font-bold',
+                    hidden: 'hover:bg-white bg-white',
+                    weekdays: 'text-xs',
+                    weeks: 'mt-4',
                   }}
                 />
 
