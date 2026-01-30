@@ -1,7 +1,7 @@
 'use client';
 
-import PrimaryButton from '@/components/buttons/PrimaryButton';
-import ServiceTitle from '@/components/title/ServiceTitle';
+import PrimaryButton from '@components/buttons/PrimaryButton';
+import ServiceTitle from '@components/title/ServiceTitle';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setActive(true);
-    }, 1000); // 2초 후 실행
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
