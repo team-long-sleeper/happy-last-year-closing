@@ -10,3 +10,8 @@ body {
   font-size: 16px;
   word-break: keep-all;
 }
+
+html,
+body {
+  overscroll-behavior: none;
+}

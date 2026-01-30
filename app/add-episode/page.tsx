@@ -1,18 +1,13 @@
-"use client";
-import Icon from "@/components/common/Icon";
-import Header from "@/components/title/Header";
-import DateInput, { formatSingleDate } from "@/components/common/DateInput";
-import AddImage from "@/components/add-eposide/AddImage";
-import useImageMetaData from "@/stores/imageMetaDataStore";
-import useEpisodeDataStore from "@/stores/add-/episodeDataStore";
-import {
-  BookmarkIcon,
-  CalendarIcon,
-  PlaceIcon,
-  MateIcon,
-  AddIcon,
-} from "@assets/icons";
-import { isSameDay } from "date-fns";
+'use client';
+import Icon from '@components/common/Icon';
+import Header from '@components/title/Header';
+import DateInput, { formatSingleDate } from '@components/common/DateInput';
+import AddImage from '@components/add-eposide/AddImage';
+import useImageMetaData from '@/stores/imageMetaDataStore';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import { BookmarkIcon, CalendarIcon, PlaceIcon } from '@assets/icons';
+import { isSameDay } from 'date-fns';
+import AddFriends from '@components/add-eposide/AddFriends';
 
 export default function AddEpisode() {
   const { dates } = useImageMetaData();
@@ -23,8 +18,7 @@ export default function AddEpisode() {
       return setEpisodeDate({ from: date, to: date });
     }
 
-    const isSameSingleClick =
-      isSameDay(date, episodeDate.from) && isSameDay(date, episodeDate.to);
+    const isSameSingleClick = isSameDay(date, episodeDate.from) && isSameDay(date, episodeDate.to);
     const selectFromEdge = isSameDay(date, episodeDate.from);
     const selectToEdge = isSameDay(date, episodeDate.to);
 
@@ -66,7 +60,7 @@ export default function AddEpisode() {
         {dates.length > 0 && (
           <div className="w-full gap-1 flex  pl-35.5 overflow-y-scroll">
             {dates.map((date, index) => {
-              const recommand = formatSingleDate(date, "number");
+              const recommand = formatSingleDate(date, 'number');
               return (
                 <div
                   onClick={() => onHandleClickRecommendDate(date)}
@@ -74,8 +68,8 @@ export default function AddEpisode() {
                   className={`w-fit text-sm text-gray-600 border border-primary rounded-2xl px-3 py-1 whitespace-nowrap shrink-0 ${
                     (episodeDate?.from && isSameDay(date, episodeDate.from)) ||
                     (episodeDate?.to && isSameDay(date, episodeDate.to))
-                      ? "bg-primary text-white"
-                      : ""
+                      ? 'bg-primary text-white'
+                      : ''
                   }`}
                 >
                   {recommand}
@@ -96,18 +90,7 @@ export default function AddEpisode() {
       </div>
 
       <div className="flex items-center gap-2 flex-col w-full">
-        <div className="w-full">
-          <span className="text-3xl font-extralight text-primary pl-26 text-right">
-            0
-          </span>
-        </div>
-
-        <div className="w-full flex items-start gap-4 pl-25.5">
-          <Icon src={MateIcon} size="m" content="에피소드 친구" />
-          <div className="size-17 bg-primary flex justify-center items-center rounded-full cursor-pointer">
-            <Icon src={AddIcon} size="m" content="친구 추가하기" />
-          </div>
-        </div>
+        <AddFriends />
       </div>
     </div>
   );
