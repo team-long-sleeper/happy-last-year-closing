@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    remotePatterns: [new URL('https://happylastyear.xyz/assets/**')],
+  },
 };
 
 export default nextConfig;
