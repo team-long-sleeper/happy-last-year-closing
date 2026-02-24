@@ -1,3 +1,4 @@
-import KakaoLoginLogo from './kakao_logo.svg?url';
+import KakaoLogo from './kakao_logo.svg';
+import NaverLogo from './naver_logo.svg';
 
-export { KakaoLoginLogo };
+export { KakaoLogo, NaverLogo };
