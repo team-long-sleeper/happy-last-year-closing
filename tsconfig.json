@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@assets/*": ["./assets/*"],
-      "@components/*": ["./app/components/*"],
+      "@components/*": ["./components/*"],
       "@/*": ["./*"]
     }
   },

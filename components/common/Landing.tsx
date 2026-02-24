@@ -1,4 +1,4 @@
-import ServiceTitle from '@/app/components/title/ServiceTitle';
+import ServiceTitle from '@components/title/ServiceTitle';
 import React from 'react';
 
 interface LandingProps {
