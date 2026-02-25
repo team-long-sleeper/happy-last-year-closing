@@ -1,5 +1,5 @@
-import Landing from '@/app/components/common/Landing';
-import LoginButton from '@/app/components/login/LoginButton';
+import Landing from '@components/common/Landing';
+import LoginButton from '@components/login/LoginButton';
 
 export default function Login() {
   return (
