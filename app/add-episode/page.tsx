@@ -9,7 +9,7 @@ import { BookmarkIcon, CalendarIcon, PlaceIcon } from '@assets/icons';
 import { isSameDay } from 'date-fns';
 import AddFriends from '@components/add-eposide/AddMates';
 import PrimaryButton from '@components/buttons/PrimaryButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function AddEpisode() {
   const [isReadyToAdd, setIsReadyToAdd] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export default function AddEpisode() {
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
         <Icon icon={BookmarkIcon} />
         <input
-          className="text-2xl w-full placeholder:opacity-25 placeholder:text-primary outline-none text-text-default"
+          className="text-2xl w-full placeholder:text-primary-sub outline-none text-text-default"
           placeholder="에피소드 제목"
         />
       </div>
@@ -83,7 +83,7 @@ export default function AddEpisode() {
       </div>
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
         <Icon icon={PlaceIcon} />
-        <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
+        <span className="text-2xl text-primary-sub">에피소드 장소</span>
       </div>
       <div className="flex flex-col w-full gap-2 pb-12">
         <AddImage />

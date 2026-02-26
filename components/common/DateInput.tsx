@@ -73,7 +73,7 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
             aria-haspopup="dialog"
             aria-expanded={open}
           >
-            <span className={`text-primary text-2xl ${date ? 'text-text-default' : 'opacity-25'}`}>
+            <span className={`text-primary-sub text-2xl ${date ? 'text-text-default' : ''}`}>
               {display || placeholder}
             </span>
           </button>
