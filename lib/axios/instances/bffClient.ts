@@ -20,7 +20,12 @@ bffClient.interceptors.response.use(
     console.log(error.status);
     console.log(error.response);
 
-    if (error.status === 401 && error.response?.data.code === 'AUTH_REQUIRED') {
+    if (
+      error.status === 401 &&
+      typeof error.response?.data === 'object' &&
+      error.response.data !== null &&
+      (error.response.data as Record<string, unknown>).code === 'AUTH_REQUIRED'
+    ) {
       signOut();
     }
 
