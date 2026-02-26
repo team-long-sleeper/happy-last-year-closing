@@ -25,7 +25,7 @@ export default function ModalTemplate({ children }: ModalTemplateProps) {
   );
 
   return (
-    <div className="max-h-4/5 overflow-hidden">
+    <div className="h-full overflow-hidden">
       <div
         className={`flex flex-col gap-10  bg-white border-primary border-2 w-100 max-h-4/5 ${button ? 'border-b-0' : ''}`}
       >

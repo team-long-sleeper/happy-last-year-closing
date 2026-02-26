@@ -7,7 +7,7 @@ interface MatesListProps {
 }
 export default function MatesProfileList({ mates, onToggleMate }: MatesListProps) {
   if (mates.size === 0) {
-    return <div className="border-2 border-dashed border-primary size-17 rounded-full mb-8.75" />;
+    return <div className="border-2 border-dashed border-primary size-17 rounded-full mb-9" />;
   } else
     return (
       <div className="flex gap-2 overflow-x-scroll">

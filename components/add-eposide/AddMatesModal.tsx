@@ -1,12 +1,11 @@
-import { SearchIcon } from '@assets/icons';
 import PrimaryButton from '@components/buttons/PrimaryButton';
-import Icon from '@components/common/Icon';
 import { Modal } from '@components/common/modal/template';
 import ModalButton from '@components/common/modal/template/ModalButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MatesProfileList from './MatesProfileList';
 import SearchMates from './SearchMates';
 import { Mate } from '@/types/mates.types';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
 // todo 공통 타입으로 빼야할 것 같음
 interface AddMatesModalProps {
@@ -14,9 +13,16 @@ interface AddMatesModalProps {
 }
 
 export default function AddMatesModal({ closeModal }: AddMatesModalProps) {
-  const [selected, setSelected] = useState<Map<string, Mate>>(new Map());
+  const { mates, setMates } = useEpisodeDataStore();
+  const [selected, setSelected] = useState<Map<string, Mate>>(mates);
+
+  const onClickAddMates = () => {
+    setMates(selected);
+    closeModal();
+  };
 
   const onToggleMate = (mate: Mate) => {
+    // todo  선택 시 제일 오른쪽으로 스크롤 (선택된 친구를 확인할 수 있게)
     setSelected((prev) => {
       const next = new Map(prev);
       if (next.has(mate.id)) {
@@ -41,7 +47,9 @@ export default function AddMatesModal({ closeModal }: AddMatesModalProps) {
         </div>
       </Modal.Content>
       <ModalButton>
-        <PrimaryButton isDisabled={selected.size < 1}>{selected.size}명 추가하기</PrimaryButton>
+        <PrimaryButton onClickFunc={onClickAddMates} isDisabled={selected.size < 1}>
+          {selected.size}명 추가하기
+        </PrimaryButton>
       </ModalButton>
     </Modal>
   );
