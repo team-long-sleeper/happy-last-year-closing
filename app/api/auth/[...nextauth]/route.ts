@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth, { AuthOptions } from 'next-auth';
 import { getKakaoProvider } from './kakao.auth';
 
@@ -6,45 +5,51 @@ export const authOptions: AuthOptions = {
   providers: [getKakaoProvider()],
   session: { strategy: 'jwt' },
   callbacks: {
-    async jwt({ token, account }) {
-      if (account?.provider === 'kakao' && account.access_token) {
-        const result = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, {
+    async jwt({ token, account, trigger, session }) {
+      if (trigger === 'update') {
+        token.needServiceLogin = session.user.needServiceLogin;
+        token.serviceAuthenticated = session.user.serviceAuthenticated;
+      }
+
+      if (trigger === 'signIn' && account) {
+        const result = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          // note 서버-서버 인증 헤더 추가?
-          // headers: { "Content-Type": "application/json", "Authorization": `Bearer ${process.env.INTERNAL_API_KEY}` },
           body: JSON.stringify({
-            provider: account.provider,
-            kakaoAccessToken: account.access_token,
+            provider: account.provider.toUpperCase(),
+            oauthAccessToken: account.access_token,
+            oauthRefreshToken: account.refresh_token,
+            oauthTokenExpiresAt: account.expires_at,
+            oauthRefreshExpiresIn: account.refresh_token_expires_in,
           }),
         });
 
         if (!result.ok) {
-          // todo serviceLoginError 플래그 처리
+          console.log('oauth login fail', `[${account.provider}] : ${result.status}`);
+          // todo 실패 시 대응 어떻게?
           token.serviceLoginError = true;
-          return token;
         }
 
-        const data = (await result.json()) as {
-          accessToken: string;
-          user: { id: string; email?: string | null; nickname?: string | null };
-          expiresIn: number;
-        };
+        const data = (await result.json()) as { user: { id: string } };
 
-        token.serviceAccessToken = data.accessToken;
         token.serviceUserId = data.user.id;
-        token.serviceTokenExp = Date.now() + data.expiresIn * 1000;
+        token.serviceLoginError = false;
+        token.needServiceLogin = true;
+        token.serviceAuthenticated = false;
       }
 
       return token;
     },
     async session({ session, token }) {
-      (session as any).serviceUserId = token.serviceUserId;
-      (session as any).serviceLoginError = token.serviceLoginError ?? false;
+      session.user.serviceUserId = token.serviceUserId;
+      session.user.serviceLoginError = token.serviceLoginError;
+      session.user.needServiceLogin = token.needServiceLogin ?? false;
+      session.user.serviceAuthenticated = token.serviceAuthenticated ?? false;
 
       return session;
     },
   },
+
   pages: {
     signIn: '/login',
   },

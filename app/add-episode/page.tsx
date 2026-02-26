@@ -7,9 +7,12 @@ import useImageMetaData from '@/stores/imageMetaDataStore';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { BookmarkIcon, CalendarIcon, PlaceIcon } from '@assets/icons';
 import { isSameDay } from 'date-fns';
-import AddFriends from '@components/add-eposide/AddFriends';
+import AddFriends from '@components/add-eposide/AddMates';
+import PrimaryButton from '@components/buttons/PrimaryButton';
+import { useEffect, useState } from 'react';
 
 export default function AddEpisode() {
+  const [isReadyToAdd, setIsReadyToAdd] = useState<boolean>(false);
   const { dates } = useImageMetaData();
   const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
 
@@ -43,16 +46,15 @@ export default function AddEpisode() {
     <div className="h-dvh">
       <Header title="에피소드 추가하기" />
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
-        <Icon src={BookmarkIcon} size="m" content="에피소드 제목" />
+        <Icon icon={BookmarkIcon} />
         <input
-          className="text-2xl w-full placeholder:opacity-25 placeholder:text-primary outline-none text-text-default"
+          className="text-2xl w-full placeholder:text-primary-sub outline-none text-text-default"
           placeholder="에피소드 제목"
         />
       </div>
-
       <div className="flex items-center gap-4 flex-col  pb-12">
         <div className="w-full flex h-fit items-center gap-4 pl-25.5">
-          <Icon src={CalendarIcon} size="m" content="에피소드 날짜" />
+          <Icon icon={CalendarIcon} />
 
           <DateInput />
         </div>
@@ -79,19 +81,19 @@ export default function AddEpisode() {
           </div>
         )}
       </div>
-
       <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
-        <Icon src={PlaceIcon} size="m" content="에피소드 장소" />
-        <span className="text-2xl text-primary opacity-25">에피소드 장소</span>
+        <Icon icon={PlaceIcon} />
+        <span className="text-2xl text-primary-sub">에피소드 장소</span>
       </div>
-
       <div className="flex flex-col w-full gap-2 pb-12">
         <AddImage />
       </div>
-
       <div className="flex items-center gap-2 flex-col w-full">
         <AddFriends />
       </div>
+      <PrimaryButton isBottomBtn isDisabled={!isReadyToAdd}>
+        추가하기
+      </PrimaryButton>
     </div>
   );
 }

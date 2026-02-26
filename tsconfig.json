@@ -20,11 +20,12 @@
     ],
     "paths": {
       "@assets/*": ["./assets/*"],
-      "@components/*": ["./app/components/*"],
+      "@components/*": ["./components/*"],
       "@/*": ["./*"]
     }
   },
   "include": [
+    "svgr.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
