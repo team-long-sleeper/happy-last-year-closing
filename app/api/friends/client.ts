@@ -10,12 +10,9 @@ class FriendsService {
     return await bffClient
       .get('/friends')
       .then((response) => {
-        console.log('getContacts', response);
         return response.data;
       })
-      .catch((error) => {
-        console.log('getContacts', error);
-      });
+      .catch((error) => {});
   }
 
   async postNewFriend(data: PostFriendData) {
