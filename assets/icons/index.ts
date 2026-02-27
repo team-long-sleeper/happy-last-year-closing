@@ -7,7 +7,6 @@ import BookmarkIcon from '@assets/icons/bookmark.svg';
 import ImageIcon from '@assets/icons/image.svg';
 import CloseIcon from '@assets/icons/close.svg';
 import SearchIcon from '@assets/icons/search.svg';
-import ArrowTailedIcon from '@assets/icons/arrow_forward.svg';
 import GuidePlaceIcon from '@assets/icons/place_guide_icon.svg';
 
 export {
@@ -20,6 +19,5 @@ export {
   ImageIcon,
   CloseIcon,
   SearchIcon,
-  ArrowTailedIcon,
   GuidePlaceIcon,
 };
