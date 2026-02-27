@@ -1,12 +1,11 @@
 import { Mate } from '@/types/mates.types';
-import { SearchIcon } from '@assets/icons';
-import Icon from '@components/common/Icon';
 import { useMemo, useState } from 'react';
 import MateList from './Mate';
 import PrimaryButton from '@components/buttons/PrimaryButton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import friendsService from '@/app/api/friends/client';
 import axios from 'axios';
+import SearchInputField from '@components/common/SearchInputField';
 
 interface SearchMatesProps {
   selected: Map<string, Mate>;
@@ -31,10 +30,6 @@ export default function SearchMates({ selected, onToggleMate }: SearchMatesProps
     return data.filter((f) => f.name.toLowerCase().includes(searchName.toLowerCase()));
   }, [data, searchName]);
 
-  const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchName(e.target.value);
-  };
-
   const onClickAddFriends = async () => {
     await mutation.mutateAsync();
   };
@@ -48,18 +43,11 @@ export default function SearchMates({ selected, onToggleMate }: SearchMatesProps
 
   return (
     <div className="flex flex-col gap-6 ">
-      <div className="border-2 border-primary flex justify-end">
-        <input
-          type="search"
-          className="w-full pl-3 outline-none"
-          value={searchName}
-          onChange={onChangeSearchInput}
-        />
-        <div className=" py-2 px-3">
-          <Icon icon={SearchIcon} />
-        </div>
-      </div>
-
+      <SearchInputField
+        value={searchName}
+        onChange={setSearchName}
+        placeholder="친구를 검색해보세요"
+      />
       {searchName !== '' && filteredFriends.length === 0 ? (
         <div className=" h-40  overflow-scroll">
           <div className="flex justify-center items-center p-6 text-primary/50">

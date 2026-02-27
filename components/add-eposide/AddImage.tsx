@@ -8,7 +8,7 @@ import { UploadedImage } from '@/types/episode.types';
 export default function AddImage() {
   const [images, setImages] = useState<UploadedImage[] | null>(null);
   return (
-    <>
+    <div className="flex flex-col w-full gap-2 pb-12">
       <div className="w-full flex">
         <span className="text-3xl font-extralight text-primary pl-17 text-right">
           {images ? images.length : 0}/5
@@ -36,6 +36,6 @@ export default function AddImage() {
           <ImageUploader images={images} setImages={setImages} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

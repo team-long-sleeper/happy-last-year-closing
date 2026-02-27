@@ -6,13 +6,9 @@ import MatesProfileList from './MatesProfileList';
 import SearchMates from './SearchMates';
 import { Mate } from '@/types/mates.types';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import { ModalDefaultProps } from '@/types/modal.types';
 
-// todo 공통 타입으로 빼야할 것 같음
-interface AddMatesModalProps {
-  closeModal: () => void;
-}
-
-export default function AddMatesModal({ closeModal }: AddMatesModalProps) {
+export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
   const { mates, setMates } = useEpisodeDataStore();
   const [selected, setSelected] = useState<Map<string, Mate>>(mates);
 
