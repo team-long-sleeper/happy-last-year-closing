@@ -1,17 +1,17 @@
-import { useState } from 'react';
 import Icon from '../common/Icon';
 import ImageUploader from '../uploaders/ImageUploader';
 import Image from 'next/image';
 import { ImageIcon } from '@assets/icons';
-import { UploadedImage } from '@/types/episode.types';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
 export default function AddImage() {
-  const [images, setImages] = useState<UploadedImage[] | null>(null);
+  const { pictures } = useEpisodeDataStore();
+
   return (
     <div className="flex flex-col w-full gap-2 pb-12">
       <div className="w-full flex">
         <span className="text-3xl font-extralight text-primary pl-17 text-right">
-          {images ? images.length : 0}/5
+          {pictures ? pictures.length : 0}/5
         </span>
       </div>
 
@@ -19,9 +19,9 @@ export default function AddImage() {
         <Icon icon={ImageIcon} />
 
         <div className="flex w-fit gap-2 overflow-y-scroll pr-12">
-          {images ? (
+          {pictures ? (
             <>
-              {images.map((image, index) => (
+              {pictures.map((image, index) => (
                 <Image
                   width={106}
                   height={106}
@@ -33,7 +33,7 @@ export default function AddImage() {
               ))}
             </>
           ) : null}
-          <ImageUploader images={images} setImages={setImages} />
+          <ImageUploader />
         </div>
       </div>
     </div>

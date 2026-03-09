@@ -2,17 +2,13 @@
 import { useRef } from 'react';
 import Icon from '../common/Icon';
 import * as exifr from 'exifr';
-import { UploadedImage } from '@/types/episode.types';
 import { AddIcon } from '@assets/icons';
 import useImageMetaData from '@/stores/imageMetaDataStore';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
-interface ImageUploaderProps {
-  images: UploadedImage[] | null;
-  setImages: (file: UploadedImage[]) => void;
-}
-
-export default function ImageUploader({ images, setImages }: ImageUploaderProps) {
+export default function ImageUploader() {
   const { setDate, setplaces } = useImageMetaData();
+  const { pictures, setPictures } = useEpisodeDataStore();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onClickUpload = () => {
@@ -64,9 +60,9 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
       }),
     );
 
-    const newImages = images ? [...images, ...uploadedImages] : uploadedImages;
+    const newImages = pictures ? [...pictures, ...uploadedImages] : uploadedImages;
 
-    setImages(newImages);
+    setPictures(newImages);
   };
 
   const extractMetadata = async (file: File) => {
