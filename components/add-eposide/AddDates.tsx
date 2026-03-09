@@ -10,30 +10,9 @@ export default function AddDates() {
   const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
 
   const onHandleClickRecommendDate = (date: Date) => {
-    if (!episodeDate || !episodeDate.from || !episodeDate.to) {
-      return setEpisodeDate({ from: date, to: date });
-    }
-
-    const isSameSingleClick = isSameDay(date, episodeDate.from) && isSameDay(date, episodeDate.to);
-    const selectFromEdge = isSameDay(date, episodeDate.from);
-    const selectToEdge = isSameDay(date, episodeDate.to);
-
-    let nextDates: { from: Date; to: Date } | null = null;
-
-    if (isSameSingleClick) {
-      nextDates = null;
-    } else if (selectFromEdge) {
-      nextDates = { from: episodeDate.to, to: episodeDate.to };
-    } else if (selectToEdge) {
-      nextDates = { from: episodeDate.from, to: episodeDate.from };
-    } else if (episodeDate.from < date) {
-      nextDates = { from: episodeDate.from, to: date };
-    } else {
-      nextDates = { from: date, to: episodeDate.to };
-    }
-
-    setEpisodeDate(nextDates);
+    setEpisodeDate(date);
   };
+
   return (
     <div className="flex items-center gap-4 flex-col  pb-12">
       <div className="w-full flex h-fit items-center gap-4 pl-25.5">
@@ -51,10 +30,7 @@ export default function AddDates() {
                 onClick={() => onHandleClickRecommendDate(date)}
                 key={index}
                 className={`w-fit text-sm text-gray-600 border border-primary rounded-2xl px-3 py-1 whitespace-nowrap shrink-0 ${
-                  (episodeDate?.from && isSameDay(date, episodeDate.from)) ||
-                  (episodeDate?.to && isSameDay(date, episodeDate.to))
-                    ? 'bg-primary text-white'
-                    : ''
+                  episodeDate && isSameDay(date, episodeDate) ? 'bg-primary text-white' : ''
                 }`}
               >
                 {recommand}
