@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { serviceClient } from './axios/instances';
 import { AxiosRequestConfig } from 'axios';
 import { cookies } from 'next/headers';
@@ -61,7 +61,7 @@ async function tryRefresh(
 export async function proxyToService(
   req: NextRequest,
   opts: ServiceFetchOpts,
-): Promise<{ status: number; data?: any; headers?: any; setCookie?: string }> {
+): Promise<{ status: number; data?: any; headers?: any; setCookie?: string | string[] }> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('access_token');
   const refreshKey = cookieStore.get('refresh_key');
@@ -115,9 +115,7 @@ export async function proxyToService(
 
     //access token도 없는데 refresh key도 없어? 로그아웃시키기
     return { status: 401, data: { code: 'AUTH_REQUIRED', message: 'Unauthenticated' } };
-  }
-
-  if (accessToken) {
+  } else {
     try {
       const result = await serviceClient.request({
         method: opts.method,
@@ -132,17 +130,75 @@ export async function proxyToService(
         },
       });
 
-      return { status: result.status, data: result.data, headers: result.headers };
+      return {
+        status: result.status,
+        data: result.data,
+        headers: result.headers,
+        setCookie: result.headers['set-cookie'],
+      };
     } catch (error: any) {
       const status = (error.response.status ?? 500) as number;
 
-      if (status !== 401) {
-        // access token으로 api 호출했는데 401인 경우 ??
-        // -> 만료시간 계산 미스 ??
-        return { status, data: error.response.data ?? { message: 'Service Error' } };
+      if (status === 401) {
+        const filteredHeaders = Object.entries(opts.config?.headers ?? {}).reduce(
+          (acc, [key, value]) => {
+            if (typeof value === 'string') acc[key] = value;
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
+        const refreshed = await tryRefresh({ ...filteredHeaders, ...baseHeaders });
+
+        if (!refreshed.ok) {
+          console.log('refreshed  ❌❌❌❌❌');
+
+          return { status: 401, data: refreshed.data };
+        }
+
+        const newAccess = getCookieValue(refreshed.setCookie, 'access_token');
+
+        try {
+          const resultAgain = await serviceClient.request({
+            method: opts.method,
+            url: opts.url,
+            data: opts.body,
+            ...opts.config,
+            headers: {
+              ...baseHeaders,
+              Authorization: `Bearer ${newAccess}`,
+              ...(opts.config?.headers ?? {}),
+            },
+          });
+
+          return {
+            status: resultAgain.status,
+            data: resultAgain.data,
+            headers: resultAgain.headers,
+            setCookie: refreshed.setCookie,
+          };
+        } catch (error: any) {
+          const st2 = (error?.response?.status ?? 500) as number;
+          return { status: st2, data: error?.response?.data ?? { message: 'Service error' } };
+        }
       }
     }
   }
 
   return { status: 500, data: { message: 'UNKNOW ERROR' } };
+}
+
+export function applySetCookie(
+  res: NextResponse,
+  setCookie: string | string[] | undefined,
+): NextResponse {
+  if (!setCookie) return res;
+
+  if (Array.isArray(setCookie)) {
+    for (const c of setCookie) res.headers.append('set-cookie', c);
+  } else {
+    res.headers.set('set-cookie', setCookie);
+  }
+
+  return res;
 }
