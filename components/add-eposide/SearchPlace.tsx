@@ -2,12 +2,12 @@ import SearchInputField from '@components/common/SearchInputField';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
-import { Place } from '@/types/place.types';
 import KakaoMap from './KakaoMap';
 import PrimaryButton from '@components/buttons/PrimaryButton';
 import Icon from '@components/common/Icon';
 import { ArrowBackIcon, GuidePlaceIcon } from '@assets/icons';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import { KakaoPlaceResponse } from '@/types/place.types';
 
 interface SearchPlaceProps {
   closeModal: () => void;
@@ -15,7 +15,7 @@ interface SearchPlaceProps {
 
 export default function SearchPlace({ closeModal }: SearchPlaceProps) {
   const [searchPlace, setSearchPlace] = useState<string>('');
-  const [selected, setSelected] = useState<Place>();
+  const [selected, setSelected] = useState<KakaoPlaceResponse>();
   const [coords, setCoords] = useState<{ x: number; y: number } | null>(null);
   const { setPlace } = useEpisodeDataStore();
 
@@ -34,7 +34,7 @@ export default function SearchPlace({ closeModal }: SearchPlaceProps) {
     closeModal();
   };
 
-  const onClickPlace = (place: Place) => {
+  const onClickPlace = (place: KakaoPlaceResponse) => {
     setSelected(place);
   };
 
@@ -63,7 +63,7 @@ export default function SearchPlace({ closeModal }: SearchPlaceProps) {
           <div className="mt-6 overflow-y-scroll h-full">
             {data ? (
               <>
-                {data?.documents.map((place: Place) => (
+                {data?.documents.map((place: KakaoPlaceResponse) => (
                   <div
                     key={place.id}
                     onClick={() => onClickPlace(place)}

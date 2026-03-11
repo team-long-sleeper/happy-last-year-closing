@@ -1,6 +1,6 @@
 'use client';
 
-import { Place } from '@/types/place.types';
+import { KakaoPlaceResponse } from '@/types/place.types';
 import { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -11,7 +11,7 @@ declare global {
 }
 
 interface KakaoMapProps {
-  place: Place;
+  place: KakaoPlaceResponse;
 }
 
 export default function KakaoMap({ place }: KakaoMapProps) {

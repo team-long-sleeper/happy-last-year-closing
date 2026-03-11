@@ -1,12 +1,12 @@
 import { UploadedImage } from '@/types/episode.types';
 import { Mate } from '@/types/mates.types';
-import { Place } from '@/types/place.types';
+import { KakaoPlaceResponse } from '@/types/place.types';
 import { create } from 'zustand';
 
 export type EpisodeDataState = {
   title: string;
   date: Date | null;
-  place: Place | undefined;
+  place: KakaoPlaceResponse | undefined;
   mates: Map<string, Mate>;
   pictures: UploadedImage[] | null;
 };
@@ -14,7 +14,7 @@ export type EpisodeDataState = {
 export type EpisodeDataStateAction = {
   setTitle: (title: string) => void;
   setDate: (date: Date | null) => void;
-  setPlace: (place: Place | undefined) => void;
+  setPlace: (place: KakaoPlaceResponse | undefined) => void;
   setMates: (mate: Map<string, Mate>) => void;
   setPictures: (pictures: UploadedImage[] | null) => void;
   resetEpisodeData: () => void;
@@ -32,7 +32,7 @@ const useEpisodeDataStore = create<EpisodeDataState & EpisodeDataStateAction>((s
   ...initialState,
   setTitle: (title: string) => set({ title }),
   setDate: (date: Date | null) => set({ date }),
-  setPlace: (place: Place | undefined) => set({ place }),
+  setPlace: (place: KakaoPlaceResponse | undefined) => set({ place }),
   setMates: (mates: Map<string, Mate>) => set({ mates }),
   setPictures: (pictures: UploadedImage[] | null) => set({ pictures }),
   resetEpisodeData: () => set(initialState),
