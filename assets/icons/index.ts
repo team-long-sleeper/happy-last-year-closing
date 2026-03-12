@@ -8,6 +8,7 @@ import ImageIcon from '@assets/icons/image.svg';
 import CloseIcon from '@assets/icons/close.svg';
 import SearchIcon from '@assets/icons/search.svg';
 import GuidePlaceIcon from '@assets/icons/place_guide_icon.svg';
+import WriteIcon from '@assets/icons/create.svg';
 
 export {
   CalendarIcon,
@@ -20,4 +21,5 @@ export {
   CloseIcon,
   SearchIcon,
   GuidePlaceIcon,
+  WriteIcon,
 };
