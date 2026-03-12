@@ -10,7 +10,13 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    remotePatterns: [new URL('https://happylastyear.xyz/assets/**')],
+    remotePatterns: [
+      new URL('https://happylastyear.xyz/assets/**'),
+      {
+        protocol: 'https',
+        hostname: '*.r2.cloudflarestorage.com',
+      },
+    ],
   },
 };
 
