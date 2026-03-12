@@ -1,5 +1,5 @@
 import { CloseIcon } from '@assets/icons';
-import Icon from '@components/common/Icon';
+import Icon from '@common/Icon';
 
 interface ModalTitleProps {
   children?: React.ReactNode;

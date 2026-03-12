@@ -2,7 +2,7 @@
 import Header from '@components/title/Header';
 import AddImage from '@components/add-eposide/AddImage';
 import AddFriends from '@components/add-eposide/AddMates';
-import PrimaryButton from '@components/buttons/PrimaryButton';
+import PrimaryButton from '@common/buttons/PrimaryButton';
 import { useEffect, useMemo, useState } from 'react';
 import AddPlace from '@components/add-eposide/AddPlace';
 import AddDates from '@components/add-eposide/AddDates';
@@ -13,7 +13,7 @@ import { useMutation } from '@tanstack/react-query';
 import uploadsService from '../api/uploads/client';
 import { putUploads } from '@/lib/uploads';
 import episodeService from '../api/episodes/client';
-import { CreateEpisodeReq, PlaceBody } from '@/types/episode.types';
+import { EpisodeReqBody, PlaceBody } from '@/types/episode.types';
 import { useRouter } from 'next/navigation';
 
 export default function AddEpisode() {
@@ -29,7 +29,7 @@ export default function AddEpisode() {
   });
 
   const episodeMutation = useMutation({
-    mutationFn: async (episodeBody: CreateEpisodeReq) => {
+    mutationFn: async (episodeBody: EpisodeReqBody) => {
       return await episodeService.createEpisode(episodeBody);
     },
     onSuccess: (data) => {
@@ -72,11 +72,11 @@ export default function AddEpisode() {
       name: place.place_name,
       lat: Number(place.y),
       lng: Number(place.x),
-      providerId: 'KAKAO',
+      providerId: place.id,
       url: place.place_url,
     };
 
-    const requestBody: CreateEpisodeReq = {
+    const requestBody: EpisodeReqBody = {
       title,
       date: date.toISOString(),
       coverIndex: 0,
