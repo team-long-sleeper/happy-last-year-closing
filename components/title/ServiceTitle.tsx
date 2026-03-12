@@ -4,7 +4,7 @@ interface TitleProps {
 
 export default function ServiceTitle({ titleColor }: TitleProps) {
   return (
-    <div className="mx-auto">
+    <div className="mx-auto fixed -translate-x-1/2 left-1/2 z-20 ">
       <div
         className={`px-5 flex gap-1 justify-between w-full  ${titleColor} text-en-36 font-extralight transform-all duration-300 ease-in-out`}
       >
