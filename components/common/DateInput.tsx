@@ -12,7 +12,7 @@ type InputProps = {
 
 export const DATE_FORMAT = {
   display: 'MMMMMM d일',
-  number: 'MM/dd',
+  number: 'M/d E',
 } as const;
 
 export type DateFormatKey = keyof typeof DATE_FORMAT;
