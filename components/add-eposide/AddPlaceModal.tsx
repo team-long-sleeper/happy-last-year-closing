@@ -1,5 +1,5 @@
 import { ModalDefaultProps } from '@/types/modal.types';
-import { Modal } from '@components/common/modal/template';
+import { Modal } from '@common/modal/template';
 import SearchPlace from './SearchPlace';
 
 export default function AddPlaceModal({ closeModal }: ModalDefaultProps) {

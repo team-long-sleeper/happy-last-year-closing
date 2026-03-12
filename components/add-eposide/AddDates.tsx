@@ -1,8 +1,8 @@
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import useImageMetaData from '@/stores/imageMetaDataStore';
 import { CalendarIcon } from '@assets/icons';
-import DateInput, { formatSingleDate } from '@components/common/DateInput';
-import Icon from '@components/common/Icon';
+import DateInput, { formatSingleDate } from '@common/DateInput';
+import Icon from '@common/Icon';
 import { isSameDay } from 'date-fns';
 
 export default function AddDates() {

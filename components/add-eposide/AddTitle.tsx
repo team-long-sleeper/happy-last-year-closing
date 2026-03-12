@@ -1,6 +1,6 @@
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { BookmarkIcon } from '@assets/icons';
-import Icon from '@components/common/Icon';
+import Icon from '@common/Icon';
 
 export default function AddTitle() {
   const { setTitle } = useEpisodeDataStore();

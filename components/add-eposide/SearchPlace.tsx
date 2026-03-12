@@ -1,10 +1,10 @@
-import SearchInputField from '@components/common/SearchInputField';
+import SearchInputField from '@common/SearchInputField';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
 import KakaoMap from './KakaoMap';
-import PrimaryButton from '@components/buttons/PrimaryButton';
-import Icon from '@components/common/Icon';
+import PrimaryButton from '@common/buttons/PrimaryButton';
+import Icon from '@common/Icon';
 import { ArrowBackIcon, GuidePlaceIcon } from '@assets/icons';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { KakaoPlaceResponse } from '@/types/place.types';

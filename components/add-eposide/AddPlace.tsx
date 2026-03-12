@@ -1,6 +1,6 @@
 import { CloseIcon, PlaceIcon } from '@assets/icons';
-import Icon from '@components/common/Icon';
-import ModalLayer from '@components/common/modal';
+import Icon from '@common/Icon';
+import ModalLayer from '@common/modal';
 import { useState } from 'react';
 import AddPlaceModal from './AddPlaceModal';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';

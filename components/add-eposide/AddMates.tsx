@@ -1,8 +1,8 @@
-import Icon from '@components/common/Icon';
+import Icon from '@common/Icon';
 import { MateIcon, AddIcon } from '@assets/icons';
 import { useState } from 'react';
 import AddMatesModal from './AddMatesModal';
-import ModalLayer from '@components/common/modal';
+import ModalLayer from '@common/modal';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import MateProfile from './MateProfile';
 

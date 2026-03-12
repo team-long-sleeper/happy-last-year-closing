@@ -1,6 +1,6 @@
 import { Mate } from '@/types/mates.types';
 import { CloseIcon } from '@assets/icons';
-import Icon from '@components/common/Icon';
+import Icon from '@common/Icon';
 import Image from 'next/image';
 import React, { useState } from 'react';
 

@@ -1,11 +1,11 @@
 import { Mate } from '@/types/mates.types';
 import { useMemo, useState } from 'react';
 import MateList from './Mate';
-import PrimaryButton from '@components/buttons/PrimaryButton';
+import PrimaryButton from '@common/buttons/PrimaryButton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import friendsService from '@/app/api/friends/client';
 import axios from 'axios';
-import SearchInputField from '@components/common/SearchInputField';
+import SearchInputField from '@common/SearchInputField';
 
 interface SearchMatesProps {
   selected: Map<string, Mate>;

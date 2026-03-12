@@ -1,6 +1,6 @@
-import PrimaryButton from '@components/buttons/PrimaryButton';
-import { Modal } from '@components/common/modal/template';
-import ModalButton from '@components/common/modal/template/ModalButton';
+import PrimaryButton from '@common/buttons/PrimaryButton';
+import { Modal } from '@common/modal/template';
+import ModalButton from '@common/modal/template/ModalButton';
 import { useState } from 'react';
 import MatesProfileList from './MatesProfileList';
 import SearchMates from './SearchMates';
