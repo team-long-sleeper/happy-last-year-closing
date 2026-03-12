@@ -22,7 +22,7 @@ export type EpisodeDataStateAction = {
 
 const initialState = {
   title: '',
-  date: null,
+  date: new Date(),
   place: undefined,
   mates: new Map(),
   pictures: null,
