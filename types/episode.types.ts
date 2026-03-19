@@ -59,10 +59,11 @@ export const PicturesReqSchema = z.object({
 
 export const EpisodeCreateReqSchema = z.object({
   title: z.string().min(1),
+  memo: z.string().max(150),
   date: z.iso.datetime(),
   matesId: z.array(z.string()).default([]),
   place: PlaceSchema,
-  pictures: z.array(PicturesReqSchema),
+  pictures: z.array(PicturesReqSchema).max(5),
 });
 
 export const EpisodeUpdateReqSchema = EpisodeCreateReqSchema.extend({
@@ -72,6 +73,7 @@ export const EpisodeUpdateReqSchema = EpisodeCreateReqSchema.extend({
 export const EpisodeResSchema = z.object({
   id: z.string(),
   title: z.string().min(1),
+  memo: z.string().max(150),
   date: z.string().min(1),
   mates: z.array(MateSchema.omit({ profileImage: true })).default([]),
   place: PlaceSchema.pick({ name: true }),

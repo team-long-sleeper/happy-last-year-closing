@@ -38,12 +38,15 @@ export default function AddFriends() {
       >
         <AddMatesModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>
-      <div className="w-full">
-        <span className="text-3xl font-extralight text-primary pl-26 text-right">{mates.size}</span>
-      </div>
 
-      <div className="w-full flex items-start gap-4 pl-25.5">
-        <Icon icon={MateIcon} />
+      <div className="w-full flex items-start gap-4 pl-16">
+        <div className="relative">
+          <Icon icon={MateIcon} />
+          <span className="absolute right-1/2 translate-x-1/2 top-7.5 text-primary text-right">
+            {mates.size}
+          </span>
+        </div>
+
         <div className="flex w-full overflow-x-scroll pr-12">
           <div className="flex gap-2">
             {mates ? (

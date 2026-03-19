@@ -22,12 +22,13 @@ import {
 } from '@/types/episode.types';
 import { useRouter } from 'next/navigation';
 import Button from '@components/common/buttons/Button';
+import AddMemo from '@components/add-eposide/AddMemo';
 
 export default function AddEpisode({ params }: { params: Promise<{ id?: string[] }> }) {
   const { id } = React.use(params);
   const isEdit = !!id;
 
-  const { date, mates, place, title, pictures, deletedPictureId, resetEpisodeData } =
+  const { date, mates, place, title, pictures, memo, deletedPictureId, resetEpisodeData } =
     useEpisodeDataStore();
   const { resetMetadata } = useImageMetaData();
   const [, setLoading] = useState<boolean>(false);
@@ -44,7 +45,6 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       return await episodeService.createEpisode(episodeBody);
     },
     onSuccess: (data) => {
-      console.log(data);
       setLoading(false);
       push('/');
     },
@@ -105,6 +105,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       pictures: imageKeys,
       matesId,
       deletedPictureId,
+      memo,
     };
 
     console.log(patchBody, 'onClickEditEpisode');
@@ -128,6 +129,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       matesId,
       pictures: imageKeys,
       place,
+      memo,
     };
 
     await episodeCreateMutation.mutateAsync(requestBody);
@@ -137,8 +139,9 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     <div className="h-dvh overflow-hidden">
       <Header title="에피소드 추가하기" />
       <div className="overflow-y-scroll pb-52 h-full">
-        <AddTitle />
         <AddDates />
+        <AddTitle />
+        <AddMemo />
         <AddPlace />
         <AddImage />
         <AddFriends />

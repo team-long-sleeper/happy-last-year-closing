@@ -16,7 +16,7 @@ export default function AddDates() {
 
   return (
     <div className="flex items-center gap-4 flex-col  pb-12">
-      <div className="w-full flex h-fit items-center gap-4 pl-25.5">
+      <div className="w-full flex h-fit items-center gap-4 pl-16">
         <Icon icon={CalendarIcon} />
         <DateInput />
       </div>

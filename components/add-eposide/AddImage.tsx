@@ -24,15 +24,15 @@ export default function AddImage() {
   }, [editingEpisode]);
 
   return (
-    <div className="flex flex-col w-full gap-2 pb-12">
-      <div className="w-full flex">
-        <span className="text-3xl font-extralight text-primary pl-17 text-right">
-          {pictures ? pictures.length : 0}/5
-        </span>
-      </div>
+    <div className="relative flex flex-col w-full gap-2 pb-12">
+      <div className="flex items-start gap-4 pl-16">
+        <div className="relative">
+          <Icon icon={ImageIcon} />
 
-      <div className="flex items-start gap-4 pl-25.5">
-        <Icon icon={ImageIcon} />
+          <span className="absolute right-0 top-7.5 text-primary text-right">
+            {pictures ? pictures.length : 0}/5
+          </span>
+        </div>
 
         <div className="flex w-fit gap-2 overflow-y-scroll pr-12">
           {pictures ? (
