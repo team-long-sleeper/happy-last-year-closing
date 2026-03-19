@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 
 type InputProps = {
   placeholder?: string;
@@ -13,6 +14,7 @@ type InputProps = {
 export const DATE_FORMAT = {
   display: 'MMMMMM d일',
   number: 'M/d E',
+  detail: 'M/d EEEE',
 } as const;
 
 export type DateFormatKey = keyof typeof DATE_FORMAT;
@@ -25,6 +27,12 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
   const [open, setOpen] = useState(false);
   const { date, setDate } = useEpisodeDataStore();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { data: editingEpisode } = useGetEpisodeQuery();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    setDate(new Date(editingEpisode.date));
+  }, [editingEpisode]);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -47,6 +55,7 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
   };
 
   const display = date ? formatSingleDate(date) : undefined;
+
   const defaultMonth = date ?? new Date();
 
   return (

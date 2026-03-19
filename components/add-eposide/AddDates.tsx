@@ -6,24 +6,24 @@ import Icon from '@common/Icon';
 import { isSameDay } from 'date-fns';
 
 export default function AddDates() {
-  const { dates } = useImageMetaData();
+  const { dates: datesFromImage } = useImageMetaData();
   const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
 
-  const onHandleClickRecommendDate = (date: Date) => {
-    setEpisodeDate(date);
+  const onHandleClickRecommendDate = (selectedDate: Date) => {
+    if (episodeDate && isSameDay(episodeDate, selectedDate)) return;
+    setEpisodeDate(selectedDate);
   };
 
   return (
     <div className="flex items-center gap-4 flex-col  pb-12">
       <div className="w-full flex h-fit items-center gap-4 pl-25.5">
         <Icon icon={CalendarIcon} />
-
         <DateInput />
       </div>
 
-      {dates.length > 0 && (
+      {datesFromImage.length > 0 && (
         <div className="w-full gap-1 flex  pl-35.5 overflow-y-scroll">
-          {dates.map((date, index) => {
+          {datesFromImage.map((date, index) => {
             const recommand = formatSingleDate(date, 'number');
             return (
               <div

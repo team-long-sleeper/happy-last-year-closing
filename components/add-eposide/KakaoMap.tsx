@@ -11,7 +11,7 @@ declare global {
 }
 
 interface KakaoMapProps {
-  place: KakaoPlaceResponse;
+  place: Pick<KakaoPlaceResponse, 'x' | 'y' | 'place_url'>;
 }
 
 export default function KakaoMap({ place }: KakaoMapProps) {

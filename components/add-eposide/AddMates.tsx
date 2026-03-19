@@ -1,14 +1,24 @@
 import Icon from '@common/Icon';
 import { MateIcon, AddIcon } from '@assets/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddMatesModal from './AddMatesModal';
 import ModalLayer from '@common/modal';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import MateProfile from './MateProfile';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 
 export default function AddFriends() {
-  const { mates, setMates } = useEpisodeDataStore();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { mates, setMates } = useEpisodeDataStore();
+  const { data: editingEpisode } = useGetEpisodeQuery();
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    const editingMates = new Map(editingEpisode.mates.map((item) => [item.id, item]));
+    setMates(editingMates);
+  }, [editingEpisode]);
 
   const onClickAddBtn = () => {
     setOpenModal(true);
@@ -21,7 +31,11 @@ export default function AddFriends() {
 
   return (
     <div className="flex items-center gap-2 flex-col w-full">
-      <ModalLayer open={openModal} onClose={() => setOpenModal(false)}>
+      <ModalLayer
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        variant={isMobile ? 'fullscreen' : 'modal'}
+      >
         <AddMatesModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>
       <div className="w-full">
@@ -30,8 +44,8 @@ export default function AddFriends() {
 
       <div className="w-full flex items-start gap-4 pl-25.5">
         <Icon icon={MateIcon} />
-        <div className="flex w-[calc(100dvw-180px)]">
-          <div className="flex gap-2 overflow-x-scroll w-full">
+        <div className="flex w-full overflow-x-scroll pr-12">
+          <div className="flex gap-2">
             {mates ? (
               <>
                 {Array.from(mates.values()).map((mate) => (

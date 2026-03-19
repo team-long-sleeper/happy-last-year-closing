@@ -1,4 +1,3 @@
-import PrimaryButton from '@common/buttons/PrimaryButton';
 import { Modal } from '@common/modal/template';
 import ModalButton from '@common/modal/template/ModalButton';
 import { useState } from 'react';
@@ -7,10 +6,13 @@ import SearchMates from './SearchMates';
 import { Mate } from '@/types/mates.types';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { ModalDefaultProps } from '@/types/modal.types';
+import Button from '@components/common/buttons/Button';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
   const { mates, setMates } = useEpisodeDataStore();
   const [selected, setSelected] = useState<Map<string, Mate>>(mates);
+  const isMobile = useIsMobile();
 
   const onClickAddMates = () => {
     setMates(selected);
@@ -31,10 +33,10 @@ export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
   };
 
   return (
-    <Modal>
+    <Modal variant={isMobile ? 'fullscreen' : 'modal'}>
       <Modal.Title onClose={closeModal}>에피소드에 친구 추가하기</Modal.Title>
       <Modal.Content>
-        <div className="px-5 pb-10">
+        <div className="px-5 sm:pb-10">
           <div className="flex flex-col gap-6 pb-10">
             <div className="text-primary text-3xl">{selected.size}</div>
             <MatesProfileList mates={selected} onToggleMate={onToggleMate} />
@@ -43,9 +45,9 @@ export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
         </div>
       </Modal.Content>
       <ModalButton>
-        <PrimaryButton onClickFunc={onClickAddMates} isDisabled={selected.size < 1}>
+        <Button onClickFunc={onClickAddMates} isDisabled={selected.size < 1}>
           {selected.size}명 추가하기
-        </PrimaryButton>
+        </Button>
       </ModalButton>
     </Modal>
   );

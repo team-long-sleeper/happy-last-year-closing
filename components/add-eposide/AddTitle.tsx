@@ -1,9 +1,22 @@
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { BookmarkIcon } from '@assets/icons';
+import { ChangeEvent, useEffect } from 'react';
 import Icon from '@common/Icon';
 
 export default function AddTitle() {
-  const { setTitle } = useEpisodeDataStore();
+  const { title, setTitle } = useEpisodeDataStore();
+  const { data: editingEpisode } = useGetEpisodeQuery();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    setTitle(editingEpisode.title);
+  }, [editingEpisode]);
+
+  const onHandleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { target } = e;
+    setTitle(target.value);
+  };
 
   return (
     <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12">
@@ -11,7 +24,8 @@ export default function AddTitle() {
       <input
         className="text-2xl w-full placeholder:text-primary-sub outline-none text-text-default"
         placeholder="에피소드 제목"
-        onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
+        onChange={onHandleOnchange}
+        value={title}
       />
     </div>
   );

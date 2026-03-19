@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 interface MateProfileProps {
   mate: Mate;
-  onToggleMate: (mate: Mate) => void;
+  onToggleMate?: (mate: Mate) => void;
 }
 
 export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
@@ -28,7 +28,7 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
         {isHover ? (
           <div
             className="bg-primary absolute z-10 size-17 rounded-full cursor-pointer"
-            onClick={() => onToggleMate(mate)}
+            onClick={onToggleMate ? () => onToggleMate(mate) : undefined}
           >
             <div className="flex justify-center items-center h-full">
               <Icon icon={CloseIcon} iconColor="white" />

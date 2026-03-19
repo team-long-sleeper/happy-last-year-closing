@@ -1,24 +1,37 @@
 import { CloseIcon, PlaceIcon } from '@assets/icons';
 import Icon from '@common/Icon';
 import ModalLayer from '@common/modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddPlaceModal from './AddPlaceModal';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
 export default function AddPlace() {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const { place, setPlace } = useEpisodeDataStore();
-  // todo 반복되는거 훅으로 뺄까?
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { data: editingEpisode } = useGetEpisodeQuery();
+  const { place, setPlace } = useEpisodeDataStore();
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    console.log(editingEpisode.place, 'editing episode');
+    setPlace(editingEpisode.place);
+  }, [editingEpisode]);
 
   const onClickAddBtn = () => {
     setOpenModal(true);
-    if (place) setPlace(undefined);
+    setPlace(undefined);
   };
 
   return (
     <div className="flex items-center gap-4 pl-25.5 pr-5 pb-12 ">
-      <ModalLayer open={openModal} onClose={() => setOpenModal(false)}>
+      <ModalLayer
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        variant={isMobile ? 'fullscreen' : 'modal'}
+      >
         <AddPlaceModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>
       <Icon icon={PlaceIcon} />
@@ -34,8 +47,8 @@ export default function AddPlace() {
           }}
         >
           <div className="flex flex-col gap-2  w-full ">
-            <span className="text-2xl">{place.place_name}</span>
-            <span className="text-sm text-gray-400">{place.address_name}</span>
+            <span className="text-2xl">{place.name}</span>
+            <span className="text-sm text-gray-400">{place.address}</span>
           </div>
 
           <div className="absolute right-10">
