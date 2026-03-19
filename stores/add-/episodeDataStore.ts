@@ -1,22 +1,23 @@
-import { UploadedImage } from '@/types/episode.types';
+import { EpisodeImages, PlaceBody } from '@/types/episode.types';
 import { Mate } from '@/types/mates.types';
-import { KakaoPlaceResponse } from '@/types/place.types';
 import { create } from 'zustand';
 
 export type EpisodeDataState = {
   title: string;
   date: Date | null;
-  place: KakaoPlaceResponse | undefined;
+  place: PlaceBody | undefined;
   mates: Map<string, Mate>;
-  pictures: UploadedImage[] | null;
+  pictures: EpisodeImages[] | null;
+  deletedPictureId?: number[];
 };
 
 export type EpisodeDataStateAction = {
   setTitle: (title: string) => void;
   setDate: (date: Date | null) => void;
-  setPlace: (place: KakaoPlaceResponse | undefined) => void;
+  setPlace: (place: PlaceBody | undefined) => void;
   setMates: (mate: Map<string, Mate>) => void;
-  setPictures: (pictures: UploadedImage[] | null) => void;
+  setPictures: (pictures: EpisodeImages[] | null) => void;
+  setDeletedPictureId: (id: number) => void;
   resetEpisodeData: () => void;
 };
 
@@ -32,9 +33,14 @@ const useEpisodeDataStore = create<EpisodeDataState & EpisodeDataStateAction>((s
   ...initialState,
   setTitle: (title: string) => set({ title }),
   setDate: (date: Date | null) => set({ date }),
-  setPlace: (place: KakaoPlaceResponse | undefined) => set({ place }),
+  setPlace: (place: PlaceBody | undefined) => set({ place }),
   setMates: (mates: Map<string, Mate>) => set({ mates }),
-  setPictures: (pictures: UploadedImage[] | null) => set({ pictures }),
+  setPictures: (pictures: EpisodeImages[] | null) => set({ pictures }),
+  setDeletedPictureId: (id: number) =>
+    set((state) => {
+      const prev = state.deletedPictureId ? [...state.deletedPictureId] : [];
+      return { deletedPictureId: [...prev, id] };
+    }),
   resetEpisodeData: () => set(initialState),
 }));
 
