@@ -3,5 +3,5 @@ interface ModalContentProps {
 }
 
 export default function ModalContent({ children }: ModalContentProps) {
-  return <div>{children}</div>;
+  return children;
 }

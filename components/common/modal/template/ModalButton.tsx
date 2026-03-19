@@ -1,7 +1,8 @@
 interface ModalButtonProps {
   children?: React.ReactNode;
+  twStyle?: string;
 }
 
-export default function ModalButton({ children }: ModalButtonProps) {
-  return <div>{children}</div>;
+export default function ModalButton({ children, twStyle }: ModalButtonProps) {
+  return <div className={`${twStyle ?? ''}`}>{children}</div>;
 }
