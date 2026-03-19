@@ -9,8 +9,8 @@ interface IconProps {
 
 export default function Icon({
   icon: SVGComponent,
-  iconColor,
   onClickFunc,
+  iconColor = 'primary',
   size = 'm',
 }: IconProps) {
   const sizeClass = {

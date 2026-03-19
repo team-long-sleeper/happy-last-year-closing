@@ -2,17 +2,13 @@
 import { useRef } from 'react';
 import Icon from '../common/Icon';
 import * as exifr from 'exifr';
-import { UploadedImage } from '@/types/episode.types';
 import { AddIcon } from '@assets/icons';
 import useImageMetaData from '@/stores/imageMetaDataStore';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
-interface ImageUploaderProps {
-  images: UploadedImage[] | null;
-  setImages: (file: UploadedImage[]) => void;
-}
-
-export default function ImageUploader({ images, setImages }: ImageUploaderProps) {
+export default function ImageUploader() {
   const { setDate, setplaces } = useImageMetaData();
+  const { pictures, setPictures } = useEpisodeDataStore();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onClickUpload = () => {
@@ -32,7 +28,8 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
 
   const handleFiles = async (fileList: FileList) => {
     const uploadedImages = await Promise.all(
-      Array.from(fileList).map(async (file) => {
+      Array.from(fileList).map(async (file, index) => {
+        const order = (pictures?.length ?? 0) + (index + 1);
         if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
           const { default: heic2any } = await import('heic2any');
           const convertedBlob = await heic2any({
@@ -48,25 +45,25 @@ export default function ImageUploader({ images, setImages }: ImageUploaderProps)
           );
 
           return {
-            original: file,
-            preview: URL.createObjectURL(convertedFile),
+            src: URL.createObjectURL(convertedFile),
             name: file.name,
             file: convertedFile,
+            order,
           };
         }
 
         return {
-          original: file,
-          preview: URL.createObjectURL(file),
+          src: URL.createObjectURL(file),
           name: file.name,
           file,
+          order,
         };
       }),
     );
 
-    const newImages = images ? [...images, ...uploadedImages] : uploadedImages;
+    const newImages = pictures ? [...pictures, ...uploadedImages] : uploadedImages;
 
-    setImages(newImages);
+    setPictures(newImages);
   };
 
   const extractMetadata = async (file: File) => {

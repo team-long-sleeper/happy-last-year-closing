@@ -1,6 +1,6 @@
 import { IconComponentType, Mate, Social } from '@/types/mates.types';
 import { NaverLogo, KakaoLogo } from '@assets/images';
-import Icon from '@components/common/Icon';
+import Icon from '@common/Icon';
 
 interface MateProps {
   onClickFn: () => void;

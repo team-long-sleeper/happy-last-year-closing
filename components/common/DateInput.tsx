@@ -1,40 +1,38 @@
 'use client';
 
-import { format, isSameDay } from 'date-fns';
+import { format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
-import { DateRange, DayPicker } from 'react-day-picker';
-import { enUS } from 'date-fns/locale';
+import { DayPicker } from 'react-day-picker';
+import { ko } from 'date-fns/locale';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 
 type InputProps = {
   placeholder?: string;
 };
 
 export const DATE_FORMAT = {
-  display: 'MMMMMM dd',
-  number: 'MM/dd',
+  display: 'MMMMMM d일',
+  number: 'M/d E',
+  detail: 'M/d EEEE',
 } as const;
 
 export type DateFormatKey = keyof typeof DATE_FORMAT;
 
 export function formatSingleDate(date: Date, formatKey: DateFormatKey = 'display') {
-  return format(date, DATE_FORMAT[formatKey], { locale: enUS });
-}
-
-export function checkDateRange(dateRange: DateRange) {
-  const { from, to } = dateRange;
-  if (!from || !to) return undefined;
-
-  const isSingleDate = isSameDay(from, to);
-
-  if (isSingleDate) return formatSingleDate(from);
-  else return `${formatSingleDate(from)} ~ ${formatSingleDate(to)}`;
+  return format(date, DATE_FORMAT[formatKey], { locale: ko });
 }
 
 export default function DateInput({ placeholder = '에피소드 날짜' }: InputProps) {
   const [open, setOpen] = useState(false);
   const { date, setDate } = useEpisodeDataStore();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { data: editingEpisode } = useGetEpisodeQuery();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    setDate(new Date(editingEpisode.date));
+  }, [editingEpisode]);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -42,6 +40,7 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
     }
 
     document.addEventListener('keydown', onKeyDown);
+
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
@@ -55,8 +54,9 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
     setDate(null);
   };
 
-  const display = date ? checkDateRange(date) : undefined;
-  const defaultMonth = date?.from ?? new Date(2025, 0);
+  const display = date ? formatSingleDate(date) : undefined;
+
+  const defaultMonth = date ?? new Date();
 
   return (
     <div className="flex flex-col">
@@ -90,8 +90,8 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
                 className="fixed z-50 mt-2 bg-white p-3 shadow-lg border  "
               >
                 <DayPicker
-                  mode="range"
-                  locale={enUS}
+                  mode="single"
+                  locale={ko}
                   selected={date || undefined}
                   autoFocus
                   hideNavigation
@@ -123,16 +123,15 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
                     caption_label: 'hidden',
                     dropdowns: 'flex justify-center items-center p-2 text-lg flex-row-reverse',
                     disabled: 'border',
-                    range_middle: 'bg-primary text-white',
-                    range_start: 'bg-primary text-white font-bold',
-                    range_end: 'bg-primary text-white font-bold',
+                    selected: 'bg-primary text-white',
                     hidden: 'hover:bg-white bg-white',
                     weekdays: 'text-xs',
                     weeks: 'mt-4',
+                    today: 'text-primary',
                   }}
                 />
 
-                <div className="mt-3 flex items-center justify-between gap-2">
+                <div className="mt-3 flex items-center justify-between gap-2 ">
                   <button
                     type="button"
                     className="text-sm text-zinc-600 hover:text-zinc-900"

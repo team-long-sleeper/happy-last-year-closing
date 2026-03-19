@@ -1,12 +1,13 @@
 @import 'tailwindcss';
-@import './styles/font.css';
-@import './styles/utilities.css';
-@import './styles/theme.css';
+@import '../styles/font.css';
+@import '../styles/utilities.css';
+@import '../styles/theme.css';
+@import '../styles/keyframes.css';
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Happy', system-ui, sans-serif;
+  font-family: 'Happy', system-ui, sans-sekrif;
   font-size: 16px;
   word-break: keep-all;
 }
@@ -14,4 +15,8 @@ body {
 html,
 body {
   overscroll-behavior: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

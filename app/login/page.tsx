@@ -1,4 +1,4 @@
-import Landing from '@components/common/Landing';
+import Landing from '@common/Landing';
 import LoginButton from '@components/login/LoginButton';
 
 export default function Login() {

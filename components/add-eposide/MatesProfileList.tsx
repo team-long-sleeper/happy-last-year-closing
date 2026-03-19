@@ -3,7 +3,7 @@ import MateProfile from './MateProfile';
 
 interface MatesListProps {
   mates: Map<string, Mate>;
-  onToggleMate: (mate: Mate) => void;
+  onToggleMate?: (mate: Mate) => void;
 }
 export default function MatesProfileList({ mates, onToggleMate }: MatesListProps) {
   if (mates.size === 0) {

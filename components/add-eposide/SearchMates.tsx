@@ -1,11 +1,13 @@
 import { Mate } from '@/types/mates.types';
 import { useMemo, useState } from 'react';
 import MateList from './Mate';
-import PrimaryButton from '@components/buttons/PrimaryButton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import friendsService from '@/app/api/friends/client';
 import axios from 'axios';
-import SearchInputField from '@components/common/SearchInputField';
+import SearchInputField from '@common/SearchInputField';
+import Button from '@components/common/buttons/Button';
+import { useDeviceHeight } from '@/hooks/useDeviceHeight';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface SearchMatesProps {
   selected: Map<string, Mate>;
@@ -14,6 +16,8 @@ interface SearchMatesProps {
 
 export default function SearchMates({ selected, onToggleMate }: SearchMatesProps) {
   const [searchName, setSearchName] = useState<string>('');
+  const isMobile = useIsMobile();
+  const deviceHeight = useDeviceHeight();
   const queryClient = useQueryClient();
 
   const { data } = useQuery({
@@ -42,23 +46,26 @@ export default function SearchMates({ selected, onToggleMate }: SearchMatesProps
   });
 
   return (
-    <div className="flex flex-col gap-6 ">
+    <div className="flex flex-col gap-6 h-full  flex-1 min-h-0">
       <SearchInputField
         value={searchName}
         onChange={setSearchName}
         placeholder="친구를 검색해보세요"
       />
       {searchName !== '' && filteredFriends.length === 0 ? (
-        <div className=" h-40  overflow-scroll">
+        <div className=" h-full sm:h-40  overflow-scroll">
           <div className="flex justify-center items-center p-6 text-primary/50">
             검색결과가 없습니다.
           </div>
-          <PrimaryButton onClickFunc={onClickAddFriends}>
+          <Button onClickFunc={onClickAddFriends}>
             &lsquo;{searchName}&rsquo;을 친구 목록에 추가하기
-          </PrimaryButton>
+          </Button>
         </div>
       ) : (
-        <div className="flex gap-2 flex-col h-40 overflow-scroll ">
+        <div
+          className="flex gap-2 flex-col overflow-scroll"
+          style={{ height: isMobile ? `${deviceHeight - 460}px` : '160px' }}
+        >
           {filteredFriends ? (
             <>
               {filteredFriends.map((mate) => {
