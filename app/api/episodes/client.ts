@@ -1,10 +1,10 @@
 import { bffClient } from '@/lib/axios/instances';
 import {
-  CheckTodayRes,
   CreateEpisodeRes,
+  EpisodeItemRes,
   EpisodeListRes,
   EpisodeReqBody,
-  EpisodeResType,
+  EpisodeUpdateReqBody,
 } from '@/types/episode.types';
 
 class EpisodeService {
@@ -24,16 +24,24 @@ class EpisodeService {
       });
   }
 
-  async getEpisode(id: string): Promise<EpisodeResType> {
+  async getEpisode(id: string): Promise<EpisodeItemRes> {
     return await bffClient
-      .get(`/episodes/:${id}`)
+      .get(`/episodes/${id}`)
       .then((response) => response.data)
       .catch((error) => console.log(error));
   }
 
-  async getTodayCheck(): Promise<CheckTodayRes> {
+  async deleteEpisode(id: string) {
     return await bffClient
-      .get('/episodes/checkToday')
+      .delete(`/episodes/${id}`)
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
+  }
+
+  async updateEpisode(id: string, episodeBody: EpisodeUpdateReqBody) {
+    console.log({ ...episodeBody });
+    return await bffClient
+      .patch(`/episodes/${id}`, { ...episodeBody })
       .then((response) => response.data)
       .catch((error) => console.log(error));
   }

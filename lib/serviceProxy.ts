@@ -182,6 +182,10 @@ export async function proxyToService(
           return { status: st2, data: error?.response?.data ?? { message: 'Service error' } };
         }
       }
+      return {
+        status,
+        data: error?.response?.data ?? { message: 'Service error' },
+      };
     }
   }
 

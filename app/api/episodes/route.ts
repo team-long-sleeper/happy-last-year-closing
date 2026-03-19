@@ -1,10 +1,10 @@
 import { applySetCookie, proxyToService } from '@/lib/serviceProxy';
-import { EpisodeReqSchema } from '@/types/episode.types';
+import { EpisodeCreateReqSchema } from '@type/episode.types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const parsed = EpisodeReqSchema.safeParse(body);
+  const parsed = EpisodeCreateReqSchema.safeParse(body);
 
   if (!parsed.success) return Response.json({ error: parsed.error }, { status: 400 });
 
