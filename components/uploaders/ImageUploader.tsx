@@ -28,7 +28,8 @@ export default function ImageUploader() {
 
   const handleFiles = async (fileList: FileList) => {
     const uploadedImages = await Promise.all(
-      Array.from(fileList).map(async (file) => {
+      Array.from(fileList).map(async (file, index) => {
+        const order = (pictures?.length ?? 0) + (index + 1);
         if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
           const { default: heic2any } = await import('heic2any');
           const convertedBlob = await heic2any({
@@ -44,18 +45,18 @@ export default function ImageUploader() {
           );
 
           return {
-            original: file,
-            preview: URL.createObjectURL(convertedFile),
+            src: URL.createObjectURL(convertedFile),
             name: file.name,
             file: convertedFile,
+            order,
           };
         }
 
         return {
-          original: file,
-          preview: URL.createObjectURL(file),
+          src: URL.createObjectURL(file),
           name: file.name,
           file,
+          order,
         };
       }),
     );

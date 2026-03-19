@@ -1,18 +1,23 @@
 import { PresignResponse } from '@/types/uploads.type';
 
-export async function putUploads(presigned: PresignResponse, files: File[]) {
-  if (presigned.uploads.length !== files.length) throw new Error('count mismatch');
+export async function putUploads(
+  presigned: PresignResponse,
+  images: { file: File; order: number }[],
+) {
+  if (presigned.uploads.length !== images.length) throw new Error('count mismatch');
 
-  await Promise.all(
+  const result = await Promise.all(
     presigned.uploads.map(async (u, i) => {
       const r = await fetch(u.uploadUrl, {
         method: 'PUT',
-        body: files[i],
+        body: images[i].file,
         headers: { 'Content-Type': u.mimeType },
       });
       if (!r.ok) throw new Error(`upload failed ${r.status}`);
+
+      return { key: u.key, order: images[i].order };
     }),
   );
 
-  return presigned.uploads.map((u) => u.key);
+  return result;
 }
