@@ -1,10 +1,10 @@
 'use client';
+
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
 import EpisodeList from './EpisodeList';
-import { episodeListQueryFn, episodeListQueryKey } from '@/queries/episodes';
 import AnimatedCount from '@common/AnimatedCount';
 import ServiceTitle from '@components/title/ServiceTitle';
 import { isSameDay } from 'date-fns';
@@ -12,6 +12,8 @@ import AddTodayEpisode from './AddTodayEpisode';
 import QuickButton from '@components/common/buttons/QuickButton';
 import Link from 'next/link';
 import DotsLoader from '@components/common/loading/DotsLoader';
+import { episodesKeys } from '@/query/key/episodes';
+import { getEpisodeListQueryFn } from '@/query/episodes';
 
 export default function HomePageComponent() {
   const [active, setActive] = useState<boolean>(false);
@@ -25,9 +27,9 @@ export default function HomePageComponent() {
     enabled: !!session?.user.needServiceLogin,
   });
 
-  const { data: listData } = useQuery({
-    queryKey: episodeListQueryKey,
-    queryFn: episodeListQueryFn,
+  const { data: listData, status: listStatus } = useQuery({
+    queryKey: episodesKeys.base,
+    queryFn: getEpisodeListQueryFn,
     enabled: !session?.user.needServiceLogin,
   });
 
@@ -85,7 +87,7 @@ export default function HomePageComponent() {
         >
           <div
             id="bg"
-            className="w-full h-80 fixed pointer-events-none"
+            className="w-full h-80 fixed pointer-events-none z-10"
             style={{
               background:
                 scrollY > 40
@@ -98,10 +100,12 @@ export default function HomePageComponent() {
         {active ? (
           <>
             <div
-              className="text-primary pb-2 transition-all duration-500 z-20"
+              className="text-primary pb-2 transition-all duration-500"
               style={{ paddingTop: scrollY > 40 ? '0px' : '20px' }}
             >
-              <div className={`flex flex-col w-full gap-2 items-center px-5 fixed`}>
+              <div
+                className={`flex flex-col w-full gap-2 items-center px-5 fixed z-20 pointer-events-none`}
+              >
                 <div
                   className={`transition-all duration-250 ease-out h-full overflow-hidden `}
                   style={{
@@ -120,9 +124,12 @@ export default function HomePageComponent() {
               </div>
             </div>
 
-            {listData ? (
+            {listStatus === 'success' && listData ? (
               <div className="pt-23 pb-30">
-                {!isSameDay(listData.episodes[0].date, new Date()) ? <AddTodayEpisode /> : null}
+                {listData.episodes.length === 0 ||
+                !isSameDay(listData.episodes[0].date, new Date()) ? (
+                  <AddTodayEpisode />
+                ) : null}
                 <EpisodeList episodes={listData.episodes} />
               </div>
             ) : (
@@ -136,7 +143,7 @@ export default function HomePageComponent() {
                 transform: scrollY > 300 ? 'translateY(0%)' : 'translateY(120%)',
               }}
             >
-              <Link href={'/add-episode'}>
+              <Link href={'/episode/write'}>
                 <QuickButton />
               </Link>
             </div>
