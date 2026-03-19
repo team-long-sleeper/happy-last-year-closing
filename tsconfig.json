@@ -22,6 +22,7 @@
       "@assets/*": ["./assets/*"],
       "@components/*": ["./components/*"],
       "@common/*": ["./components/common/*"],
+      "@type/*": ["./types/*"],
       "@/*": ["./*"]
     }
   },
