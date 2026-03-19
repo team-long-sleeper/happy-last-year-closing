@@ -3,7 +3,7 @@ export interface Mate {
   id: string;
   name: string;
   profileImage: string;
-  social: Social[] | null;
+  social?: Social[] | null;
 }
 
 export type Social = 'KAKAO' | 'GOOGLE' | 'NAVER';
