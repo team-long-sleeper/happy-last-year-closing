@@ -8,7 +8,7 @@ interface ImageIndicatorProps {
 export default function ImageIndicator({ images, currentIndex }: ImageIndicatorProps) {
   if (images.length > 1)
     return (
-      <div className="flex items-center gap-3 w-full justify-center">
+      <div className="absolute  left-1/2 -translate-x-1/2 bottom-4 flex items-center gap-3 w-full justify-center">
         {Array.from({ length: images.length }, (_, index) => (
           <div
             key={index}

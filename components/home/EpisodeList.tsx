@@ -84,13 +84,13 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
 
                 <div className="flex items-center gap-1">
                   <Icon icon={MateIcon} size="s" iconColor="text-default" />
-                  <div className="flex">
+                  <div>
                     {item.mates.map((mate, index) => {
                       return (
-                        <div key={mate.id}>
+                        <span key={mate.id}>
                           {mate.name}
-                          {index !== item.mates.length - 1 ? ',' : ''}
-                        </div>
+                          {index !== item.mates.length - 1 ? `, ` : ''}
+                        </span>
                       );
                     })}
                   </div>
@@ -98,6 +98,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
               </div>
             </div>
             <EpisodePicture images={item.pictures} />
+            {item.memo ? <div className="pt-4 text-left w-full">{item.memo}</div> : null}
           </div>
         );
       })}
