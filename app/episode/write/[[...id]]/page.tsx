@@ -63,8 +63,8 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
   });
 
   const isReadyToAdd = useMemo(() => {
-    return !!(date && mates && place && title);
-  }, [date, mates, place, title]);
+    return !!(date && place && title && pictures);
+  }, [date, place, title, pictures]);
 
   useEffect(() => {
     return () => {
@@ -138,7 +138,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
   return (
     <div className="h-dvh overflow-hidden">
       <Header title="에피소드 추가하기" />
-      <div className="overflow-y-scroll pb-52 h-full">
+      <div className="overflow-y-scroll h-full md:pb-52">
         <AddDates />
         <AddTitle />
         <AddMemo />

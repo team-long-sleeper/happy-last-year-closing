@@ -30,7 +30,7 @@ export default function AddFriends() {
   };
 
   return (
-    <div className="flex items-center gap-2 flex-col w-full">
+    <div className="flex items-center gap-2 flex-col w-full pb-12">
       <ModalLayer
         open={openModal}
         onClose={() => setOpenModal(false)}

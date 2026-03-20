@@ -22,7 +22,7 @@ export default function AddDates() {
       </div>
 
       {datesFromImage.length > 0 && (
-        <div className="w-full gap-1 flex  pl-35.5 overflow-y-scroll">
+        <div className="w-full gap-1 flex pl-26 overflow-y-scroll">
           {datesFromImage.map((date, index) => {
             const recommand = formatSingleDate(date, 'number');
             return (

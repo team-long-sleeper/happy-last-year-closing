@@ -26,7 +26,7 @@ export default function AddPlace() {
   };
 
   return (
-    <div className="flex items-center gap-4 pl-16 pr-5 pb-12 ">
+    <div className="flex items-center gap-4 pl-16 pr-5 pb-12">
       <ModalLayer
         open={openModal}
         onClose={() => setOpenModal(false)}

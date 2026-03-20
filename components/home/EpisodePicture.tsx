@@ -11,7 +11,7 @@ export default function EpisodePicture({ images }: EpisodePictureProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   return (
-    <div className="flex flex-col gap-3 z-0">
+    <div className="relative flex flex-col gap-3 z-0">
       <ImageSlider images={images} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
       <ImageIndicator images={images} currentIndex={currentIndex} />
     </div>
