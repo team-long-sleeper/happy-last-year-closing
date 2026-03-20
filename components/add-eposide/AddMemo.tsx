@@ -1,11 +1,11 @@
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 
 export default function AddMemo() {
   const { memo, setMemo } = useEpisodeDataStore();
   const { data: editingEpisode } = useGetEpisodeQuery();
-  const [length, setLength] = useState<number>(0);
+  const length = memo.length;
 
   useEffect(() => {
     if (!editingEpisode) return;
@@ -15,7 +15,6 @@ export default function AddMemo() {
   const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { target } = e;
     setMemo(target.value);
-    setLength(target.value.length);
   };
   return (
     <div className=" flex pb-12 pl-26 w-full pr-5">
