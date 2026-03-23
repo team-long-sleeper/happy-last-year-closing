@@ -24,7 +24,9 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
         className="size-17 bg-white rounded-full relative"
         onMouseEnter={onHoverToggle}
         onMouseLeave={onHoverToggle}
+        onClick={() => (onToggleMate ? onToggleMate(mate) : undefined)}
       >
+        {/* todo onToggleMate에 mate 통째로 주는거보다 id만 줘서 삭제하기 */}
         {isHover ? (
           <div
             className="bg-primary absolute z-10 size-17 rounded-full cursor-pointer"

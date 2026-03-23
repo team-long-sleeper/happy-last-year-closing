@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import QueryProvider from '@components/providers/QueryProvider';
 import SessionProvider from '@components/providers/SessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/route';
+import Toaster from '@components/common/toast';
 
 export const metadata: Metadata = {
   title: 'Happy Last Year Closing',
@@ -21,6 +22,7 @@ export default async function RootLayout({
       <body className="w-full h-dvh">
         <SessionProvider session={session}>
           <QueryProvider>
+            <Toaster />
             <div id="modal-root" />
             {children}
           </QueryProvider>

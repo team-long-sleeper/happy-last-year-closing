@@ -5,12 +5,14 @@ interface IconProps {
   size?: 's' | 'm' | 'l';
   onClickFunc?: () => void;
   iconColor?: string;
+  hoverColor?: string;
 }
 
 export default function Icon({
   icon: SVGComponent,
   onClickFunc,
   iconColor = 'primary',
+  hoverColor = 'white',
   size = 'm',
 }: IconProps) {
   const sizeClass = {
@@ -19,16 +21,14 @@ export default function Icon({
     l: 'w-8 h-8',
   }[size];
 
-  const colorClass = `text-${iconColor}`;
+  const colorClass = `text-${iconColor} hover:text-${hoverColor}`;
 
   return (
     <div
       onClick={onClickFunc}
       className={`${onClickFunc ? ' hover:bg-primary cursor-pointer' : ''}`}
     >
-      <SVGComponent
-        className={`${sizeClass} text-primary ${onClickFunc ? ' hover:text-white' : ''} ${colorClass}`}
-      />
+      <SVGComponent className={`${sizeClass} ${colorClass}`} />
     </div>
   );
 }
