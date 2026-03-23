@@ -32,6 +32,7 @@ export default function ImageSlider({ images, currentIndex, setCurrentIndex }: I
                 draggable={false}
                 src={img.url}
                 alt={`${img.order}번 째 이미지`}
+                sizes="350px"
                 fill
                 className="absolute object-cover"
               />

@@ -17,6 +17,7 @@ export default function EpisodeImagesContainer() {
 
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const trashRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const imageSize = 106;
 
   const resetDragState = () => {
@@ -72,23 +73,6 @@ export default function EpisodeImagesContainer() {
     if (longPressTimer.current) {
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
-    }
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) {
-      cancelLongPress();
-      return;
-    }
-    e.preventDefault();
-    const touch = e.touches[0];
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-    setIsOverTrash(isOverTrashZone(touch.clientX, touch.clientY));
-
-    const el = document.elementFromPoint(touch.clientX, touch.clientY);
-    const item = el?.closest('[data-drag-index]');
-    if (item) {
-      setDragOverIndex(Number(item.getAttribute('data-drag-index')));
     }
   };
 
@@ -160,6 +144,31 @@ export default function EpisodeImagesContainer() {
   }, [isMouseDragging, dragIndex, dragOverIndex, pictures]);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) {
+        cancelLongPress();
+        return;
+      }
+      e.preventDefault();
+      const touch = e.touches[0];
+      setTouchPos({ x: touch.clientX, y: touch.clientY });
+      setIsOverTrash(isOverTrashZone(touch.clientX, touch.clientY));
+
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const item = el?.closest('[data-drag-index]');
+      if (item) {
+        setDragOverIndex(Number(item.getAttribute('data-drag-index')));
+      }
+    };
+
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', handleTouchMove);
+  }, [isDragging]);
+
+  useEffect(() => {
     if (isMouseDragging) {
       document.body.style.cursor = 'grabbing';
     } else {
@@ -169,7 +178,7 @@ export default function EpisodeImagesContainer() {
 
   if (pictures)
     return (
-      <>
+      <div ref={containerRef} className="contents">
         {pictures.map((image, index) => {
           const isGrabbed = (isDragging || isMouseDragging) && dragIndex === index;
           const isTarget = dragOverIndex === index && dragIndex !== index;
@@ -188,7 +197,6 @@ export default function EpisodeImagesContainer() {
               data-drag-index={index}
               onMouseDown={(e) => onMouseDown(index, e)}
               onTouchStart={() => onTouchStart(index)}
-              onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
               onTouchCancel={onTouchEnd}
               onContextMenu={(e) => e.preventDefault()}
@@ -218,6 +226,8 @@ export default function EpisodeImagesContainer() {
                 height={imageSize}
                 src={image.url}
                 className="size-26.5 object-cover border border-primary"
+                sizes="106px"
+                loading="eager"
                 alt={image.name ?? `${image.id}`}
               />
             </div>
@@ -238,6 +248,8 @@ export default function EpisodeImagesContainer() {
               height={imageSize}
               src={pictures[dragIndex].url}
               className="size-26.5 object-cover border border-primary"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              loading="eager"
               alt=""
             />
           </div>
@@ -251,6 +263,6 @@ export default function EpisodeImagesContainer() {
             <Icon icon={DeleteIcon} iconColor={isOverTrash ? 'white' : 'default'} />
           </div>
         )}
-      </>
+      </div>
     );
 }
