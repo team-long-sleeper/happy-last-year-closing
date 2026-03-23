@@ -14,6 +14,7 @@ const config = {
     'subject-full-stop': [2, 'never', '.'],
     // 커밋 메시지 전체 72자 제한
     'header-max-length': [2, 'always', 72],
+    'body-max-line-length': [2, 'always', 150],
   },
 };
 
