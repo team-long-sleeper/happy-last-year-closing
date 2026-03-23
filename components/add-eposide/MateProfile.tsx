@@ -42,6 +42,7 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
             alt={`${mate.name}님의 프로필 사진`}
             fill
             className="object-contain"
+            sizes="68px"
           />
         )}
       </div>
