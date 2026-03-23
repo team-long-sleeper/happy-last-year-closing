@@ -16,9 +16,9 @@ import episodeService from '../../../api/episodes/client';
 import {
   EpisodeImages,
   EpisodeReqBody,
-  EpisodeReqImageType,
   EpisodeUpdateReqBody,
-  UploadedImage,
+  OriginalPictureType,
+  PictureCreateReq,
 } from '@/types/episode.types';
 import { useRouter } from 'next/navigation';
 import Button from '@components/common/buttons/Button';
@@ -73,19 +73,32 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     };
   }, []);
 
-  const uploadeImageFiles = async (images: EpisodeImages[]): Promise<EpisodeReqImageType[]> => {
-    const validPictures = images.filter(
-      (image): image is UploadedImage => image.file !== undefined,
-    );
-
-    const mimeType = validPictures.map((image) => image.file.type);
+  const uploadImageFiles = async (
+    newImages: { file: File; order: number }[],
+  ): Promise<PictureCreateReq[]> => {
+    if (newImages.length === 0) return [];
+    const mimeType = newImages.map((image) => image.file.type);
     const presignResponse = await presignMutation.mutateAsync(mimeType);
 
-    const uploadFileds = validPictures.map((image) => {
-      return { file: image.file, order: image.order };
-    });
-    const imagesResult = await putUploads(presignResponse, uploadFileds);
-    return imagesResult;
+    const uploadedImages = await putUploads(presignResponse, newImages);
+
+    return uploadedImages;
+  };
+
+  const filteringNewAndOriginals = (images: EpisodeImages[]) => {
+    const { newImages, originalImages } = images.reduce<{
+      newImages: { file: File; order: number }[];
+      originalImages: OriginalPictureType[];
+    }>(
+      (acc, img) => {
+        if (img.file) acc.newImages.push({ file: img.file, order: img.order });
+        else acc.originalImages.push({ type: 'exists', id: img.id!, order: img.order });
+        return acc;
+      },
+      { newImages: [], originalImages: [] },
+    );
+
+    return { newImages, originalImages };
   };
 
   const onClickEditEpisode = async () => {
@@ -93,7 +106,8 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
 
     const episodeId = id[0];
 
-    const imageKeys = await uploadeImageFiles(pictures);
+    const { newImages, originalImages } = filteringNewAndOriginals(pictures);
+    const uploadedImages = await uploadImageFiles(newImages);
 
     const matesId: string[] = [];
     mates.forEach((_, key) => matesId.push(key));
@@ -102,13 +116,11 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       title,
       place,
       date: date.toISOString(),
-      pictures: imageKeys,
+      pictures: [...originalImages, ...uploadedImages],
       matesId,
       deletedPictureId,
       memo,
     };
-
-    console.log(patchBody, 'onClickEditEpisode');
 
     await episodeUpdateMudation.mutateAsync({ id: episodeId, episodeBody: patchBody });
   };
@@ -118,7 +130,8 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
 
     setLoading(true);
 
-    const imageKeys = await uploadeImageFiles(pictures);
+    const { newImages } = filteringNewAndOriginals(pictures);
+    const uploadedImages = await uploadImageFiles(newImages);
 
     const matesId: string[] = [];
     mates.forEach((_, key) => matesId.push(key));
@@ -127,7 +140,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       title,
       date: date.toISOString(),
       matesId,
-      pictures: imageKeys,
+      pictures: [...uploadedImages],
       place,
       memo,
     };

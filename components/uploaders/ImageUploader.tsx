@@ -45,7 +45,7 @@ export default function ImageUploader() {
           );
 
           return {
-            src: URL.createObjectURL(convertedFile),
+            url: URL.createObjectURL(convertedFile),
             name: file.name,
             file: convertedFile,
             order,
@@ -53,7 +53,7 @@ export default function ImageUploader() {
         }
 
         return {
-          src: URL.createObjectURL(file),
+          url: URL.createObjectURL(file),
           name: file.name,
           file,
           order,

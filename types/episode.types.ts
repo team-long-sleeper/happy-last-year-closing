@@ -11,7 +11,7 @@ export interface ImageMetaData {
 }
 
 export interface UploadedImage {
-  src: string;
+  url: string;
   name: string;
   file: File;
   order: number;
@@ -20,7 +20,7 @@ export interface UploadedImage {
 export interface EpisodeImages {
   id?: number;
   order: number;
-  src: string;
+  url: string;
   name?: string;
   file?: File;
 }
@@ -52,10 +52,23 @@ const MateSchema = z.object({
   profileImage: z.string(),
 });
 
-export const PicturesReqSchema = z.object({
+export const newPicturesReqSchema = z.object({
+  type: z.literal('new'),
   key: z.string(),
   order: z.number(),
 });
+
+export const originalPicturesReqSchema = z.object({
+  type: z.literal('exists'),
+  id: z.number(),
+  order: z.number(),
+});
+
+export type OriginalPictureType = z.infer<typeof originalPicturesReqSchema>;
+
+export const updatePictureReq = z
+  .array(z.discriminatedUnion('type', [newPicturesReqSchema, originalPicturesReqSchema]))
+  .max(5);
 
 export const EpisodeCreateReqSchema = z.object({
   title: z.string().min(1),
@@ -63,11 +76,12 @@ export const EpisodeCreateReqSchema = z.object({
   date: z.iso.datetime(),
   matesId: z.array(z.string()).default([]),
   place: PlaceSchema,
-  pictures: z.array(PicturesReqSchema).max(5),
+  pictures: z.array(newPicturesReqSchema).max(5),
 });
 
 export const EpisodeUpdateReqSchema = EpisodeCreateReqSchema.extend({
   deletedPictureId: z.array(z.number()).optional(),
+  pictures: updatePictureReq,
 });
 
 export const EpisodeResSchema = z.object({
@@ -114,4 +128,5 @@ export type EpisodePictureType = z.infer<typeof EpisodePictureSchema>;
 
 export type DeleteEpisodeReq = z.infer<typeof DeleteEpisodeSchema>;
 
-export type EpisodeReqImageType = z.infer<typeof PicturesReqSchema>;
+export type PictureUpdateReq = z.infer<typeof updatePictureReq>;
+export type PictureCreateReq = z.infer<typeof newPicturesReqSchema>;

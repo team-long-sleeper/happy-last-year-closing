@@ -30,6 +30,7 @@ const initialState = {
   place: undefined,
   mates: new Map(),
   pictures: null,
+  deletedPictureId: [],
 };
 
 const useEpisodeDataStore = create<EpisodeDataState & EpisodeDataStateAction>((set) => ({
