@@ -25,8 +25,8 @@ export default function Toaster() {
               transition-all duration-300 whitespace-nowrap flex gap-1 items-center"
           >
             <div>
-              {t.type === 'SUCCESS' && <Icon icon={SuceessIcon} iconColor="[#42ac1e]" size="s" />}
-              {t.type === 'ERROR' && <Icon icon={WarningIcon} iconColor="#ffc44d" size="s" />}
+              {t.type === 'SUCCESS' && <Icon icon={SuceessIcon} iconColor="success" size="s" />}
+              {t.type === 'ERROR' && <Icon icon={WarningIcon} iconColor="warning" size="s" />}
             </div>
             <div>{t.message}</div>
           </div>
