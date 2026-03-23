@@ -1,11 +1,11 @@
 import Icon from '../common/Icon';
 import ImageUploader from '../uploaders/ImageUploader';
-import Image from 'next/image';
 import { ImageIcon } from '@assets/icons';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import { useEffect } from 'react';
 import { EpisodeImages } from '@type/episode.types';
+import EpisodeImagesContainer from './EpisodeImagesContainer';
 
 export default function AddImage() {
   const { pictures, setPictures } = useEpisodeDataStore();
@@ -17,7 +17,7 @@ export default function AddImage() {
       return {
         id: item.id,
         order: item.order,
-        src: item.url,
+        url: item.url,
       };
     });
     setPictures(editingPictures);
@@ -34,21 +34,8 @@ export default function AddImage() {
           </span>
         </div>
 
-        <div className="flex w-fit gap-2 overflow-y-scroll pr-12">
-          {pictures ? (
-            <>
-              {pictures.map((image, index) => (
-                <Image
-                  width={106}
-                  height={106}
-                  src={image.src}
-                  className="size-26.5 object-cover shrink-0 border border-primary"
-                  key={index}
-                  alt={image.name ?? `${image.id}`}
-                />
-              ))}
-            </>
-          ) : null}
+        <div className="flex w-fit overflow-x-scroll overflow-y-hidden gap-2 pr-12">
+          <EpisodeImagesContainer />
           <ImageUploader />
         </div>
       </div>
