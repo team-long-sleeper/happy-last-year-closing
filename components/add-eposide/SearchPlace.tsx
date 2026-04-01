@@ -4,11 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
 import KakaoMap from './KakaoMap';
 import Icon from '@common/Icon';
-import { ArrowBackIcon, GuidePlaceIcon } from '@assets/icons';
+import { ArrowBackIcon } from '@assets/icons';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { KakaoPlaceResponse } from '@/types/place.types';
 import Button from '@common/buttons/Button';
 import { PlaceBody } from '@type/episode.types';
+import { PlaceGuide } from '@assets/images';
 
 interface SearchPlaceProps {
   closeModal: () => void;
@@ -86,7 +87,7 @@ export default function SearchPlace({ closeModal }: SearchPlaceProps) {
           ) : (
             <div className="w-full h-full flex justify-center items-center flex-col gap-3">
               <div className="size-30 [&>svg]:text-primary">
-                <GuidePlaceIcon />
+                <PlaceGuide />
               </div>
               <div className="text-primary">어떤 곳에서?</div>
             </div>
