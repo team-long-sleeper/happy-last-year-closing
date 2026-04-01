@@ -5,7 +5,7 @@ import { create } from 'zustand';
 export type EpisodeDataState = {
   title: string;
   memo: string;
-  date: Date | null;
+  date: Date;
   place: PlaceBody | undefined;
   mates: Map<string, Mate>;
   pictures: EpisodeImages[] | null;
@@ -15,7 +15,7 @@ export type EpisodeDataState = {
 export type EpisodeDataStateAction = {
   setTitle: (title: string) => void;
   setMemo: (memo: string) => void;
-  setDate: (date: Date | null) => void;
+  setDate: (date: Date) => void;
   setPlace: (place: PlaceBody | undefined) => void;
   setMates: (mate: Map<string, Mate>) => void;
   setPictures: (pictures: EpisodeImages[] | null) => void;
@@ -37,7 +37,7 @@ const useEpisodeDataStore = create<EpisodeDataState & EpisodeDataStateAction>((s
   ...initialState,
   setTitle: (title: string) => set({ title }),
   setMemo: (memo: string) => set({ memo }),
-  setDate: (date: Date | null) => set({ date }),
+  setDate: (date: Date) => set({ date }),
   setPlace: (place: PlaceBody | undefined) => set({ place }),
   setMates: (mates: Map<string, Mate>) => set({ mates }),
   setPictures: (pictures: EpisodeImages[] | null) => set({ pictures }),
