@@ -7,11 +7,14 @@ import BookmarkIcon from '@assets/icons/bookmark.svg';
 import ImageIcon from '@assets/icons/image.svg';
 import CloseIcon from '@assets/icons/close.svg';
 import SearchIcon from '@assets/icons/search.svg';
-import GuidePlaceIcon from '@assets/icons/place_guide_icon.svg';
 import WriteIcon from '@assets/icons/create.svg';
 import SuceessIcon from '@assets/icons/check.svg';
 import WarningIcon from '@assets/icons/warning.svg';
 import DeleteIcon from '@assets/icons/delete.svg';
+import ListIcon from '@assets/icons/list.svg';
+import TagIcon from '@assets/icons/tag.svg';
+import RankingIcon from '@assets/icons/ranking.svg';
+import TuneIcon from '@assets/icons/tune.svg';
 
 export {
   CalendarIcon,
@@ -23,9 +26,12 @@ export {
   ImageIcon,
   CloseIcon,
   SearchIcon,
-  GuidePlaceIcon,
   WriteIcon,
   SuceessIcon,
   WarningIcon,
   DeleteIcon,
+  ListIcon,
+  TagIcon,
+  RankingIcon,
+  TuneIcon,
 };
