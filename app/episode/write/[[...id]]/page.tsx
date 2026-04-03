@@ -23,12 +23,13 @@ import {
 import { useRouter } from 'next/navigation';
 import Button from '@components/common/buttons/Button';
 import AddMemo from '@components/add-eposide/AddMemo';
+import AddTag from '@components/add-eposide/AddTag';
 
 export default function AddEpisode({ params }: { params: Promise<{ id?: string[] }> }) {
   const { id } = React.use(params);
   const isEdit = !!id;
 
-  const { date, mates, place, title, pictures, memo, deletedPictureId, resetEpisodeData } =
+  const { date, mates, place, title, pictures, tags, memo, deletedPictureId, resetEpisodeData } =
     useEpisodeDataStore();
   const { resetMetadata } = useImageMetaData();
   const [, setLoading] = useState<boolean>(false);
@@ -44,7 +45,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     mutationFn: async (episodeBody: EpisodeReqBody) => {
       return await episodeService.createEpisode(episodeBody);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       setLoading(false);
       push('/');
     },
@@ -54,9 +55,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     mutationFn: async ({ id, episodeBody }: { id: string; episodeBody: EpisodeUpdateReqBody }) => {
       return await episodeService.updateEpisode(id, episodeBody);
     },
-    onSuccess: (data) => {
-      console.log(data);
-
+    onSuccess: () => {
       setLoading(false);
       push('/');
     },
@@ -112,6 +111,8 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     const matesId: string[] = [];
     mates.forEach((_, key) => matesId.push(key));
 
+    const tagLabels = tags.map((item) => item.label);
+
     const patchBody = {
       title,
       place,
@@ -120,6 +121,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       matesId,
       deletedPictureId,
       memo,
+      tags: tagLabels,
     };
 
     await episodeUpdateMudation.mutateAsync({ id: episodeId, episodeBody: patchBody });
@@ -136,6 +138,8 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     const matesId: string[] = [];
     mates.forEach((_, key) => matesId.push(key));
 
+    const tagLabels = tags.map((item) => item.label);
+
     const requestBody: EpisodeReqBody = {
       title,
       date: date.toISOString(),
@@ -143,6 +147,7 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       pictures: [...uploadedImages],
       place,
       memo,
+      tags: tagLabels,
     };
 
     await episodeCreateMutation.mutateAsync(requestBody);
@@ -153,9 +158,10 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       <Header title="에피소드 추가하기" />
       <div className="overflow-y-scroll h-full md:pb-52">
         <AddDates />
+        <AddPlace />
         <AddTitle />
         <AddMemo />
-        <AddPlace />
+        <AddTag />
         <AddImage />
         <AddFriends />
       </div>
