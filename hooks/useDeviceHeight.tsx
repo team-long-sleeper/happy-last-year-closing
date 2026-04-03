@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
 export function useDeviceHeight() {
-  const [height, setHeight] = useState(window.innerHeight);
+  const [height, setHeight] = useState<number>(
+    typeof window !== 'undefined' ? window.innerHeight : 0,
+  );
 
   useEffect(() => {
     const handler = () => setHeight(window.innerHeight);

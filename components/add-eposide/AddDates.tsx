@@ -1,13 +1,21 @@
+import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import useImageMetaData from '@/stores/imageMetaDataStore';
 import { CalendarIcon } from '@assets/icons';
 import DateInput, { formatSingleDate } from '@common/DateInput';
 import Icon from '@common/Icon';
 import { isSameDay } from 'date-fns';
+import { useEffect } from 'react';
 
 export default function AddDates() {
   const { dates: datesFromImage } = useImageMetaData();
   const { date: episodeDate, setDate: setEpisodeDate } = useEpisodeDataStore();
+  const { data: editingEpisode } = useGetEpisodeQuery();
+
+  useEffect(() => {
+    if (!editingEpisode) return;
+    setEpisodeDate(new Date(editingEpisode.date));
+  }, [editingEpisode]);
 
   const onHandleClickRecommendDate = (selectedDate: Date) => {
     if (episodeDate && isSameDay(episodeDate, selectedDate)) return;
@@ -15,7 +23,7 @@ export default function AddDates() {
   };
 
   return (
-    <div className="flex items-center gap-4 flex-col  pb-12">
+    <div className="flex items-center gap-2 flex-col pb-9">
       <div className="w-full flex h-fit items-center gap-4 pl-16">
         <Icon icon={CalendarIcon} />
         <DateInput />

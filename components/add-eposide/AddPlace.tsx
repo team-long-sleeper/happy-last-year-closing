@@ -26,7 +26,7 @@ export default function AddPlace() {
   };
 
   return (
-    <div className="flex items-center gap-4 pl-16 pr-5 pb-12">
+    <div className="flex items-center gap-4 pl-16 pr-5 pb-9">
       <ModalLayer
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -47,7 +47,7 @@ export default function AddPlace() {
           }}
         >
           <div className="flex flex-col gap-2  w-full ">
-            <span className="text-2xl">{place.name}</span>
+            <span className="text-xl">{place.name}</span>
             <span className="text-sm text-gray-400">{place.address}</span>
           </div>
 
@@ -60,7 +60,7 @@ export default function AddPlace() {
           </div>
         </div>
       ) : (
-        <span onClick={onClickAddBtn} className="text-2xl text-primary-sub cursor-pointer">
+        <span onClick={onClickAddBtn} className="text-xl text-primary-sub cursor-pointer">
           에피소드 장소
         </span>
       )}

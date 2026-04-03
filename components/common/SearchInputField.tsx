@@ -9,7 +9,7 @@ interface SearchInputProps {
 
 export default function SearchInputField({ value, placeholder, onChange }: SearchInputProps) {
   return (
-    <div className="border-2 border-primary flex justify-end ">
+    <div className="border-b-2 border-primary flex justify-end ">
       <input
         placeholder={placeholder}
         type="search"

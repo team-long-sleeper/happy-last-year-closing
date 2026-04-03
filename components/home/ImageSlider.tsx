@@ -1,6 +1,6 @@
 import { useImageSlider } from '@/hooks/useImageSlider';
+import ImageWithFallback from '@components/common/ImageWithFallback';
 import { EpisodePictureType } from '@type/episode.types';
-import Image from 'next/image';
 
 interface ImageSliderProps {
   images: EpisodePictureType[];
@@ -27,7 +27,7 @@ export default function ImageSlider({ images, currentIndex, setCurrentIndex }: I
               className="relative w-full h-87.5"
               style={{ width: `${100 / images.length}%` }}
             >
-              <Image
+              <ImageWithFallback
                 loading="eager"
                 draggable={false}
                 src={img.url}

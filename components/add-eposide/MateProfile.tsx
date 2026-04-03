@@ -19,7 +19,7 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
   };
 
   return (
-    <div className={`gap-3 flex flex-col items-center`}>
+    <div className={`gap-2 flex flex-col items-center`}>
       <div
         className="size-17 bg-white rounded-full relative"
         onMouseEnter={onHoverToggle}

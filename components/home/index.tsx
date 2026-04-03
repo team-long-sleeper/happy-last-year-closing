@@ -1,23 +1,29 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
-import EpisodeList from './EpisodeList';
-import AnimatedCount from '@common/AnimatedCount';
 import ServiceTitle from '@components/title/ServiceTitle';
-import { isSameDay } from 'date-fns';
-import AddTodayEpisode from './AddTodayEpisode';
-import QuickButton from '@components/common/buttons/QuickButton';
-import Link from 'next/link';
-import DotsLoader from '@components/common/loading/DotsLoader';
-import { episodesKeys } from '@/query/key/episodes';
-import { getEpisodeListQueryFn } from '@/query/episodes';
+import Episodes from './Episodes';
+import SumUp from './SumUp';
+
+type MainContentType = 'EPISODES' | 'SUM-UP';
+
+const TABS: Array<{
+  key: MainContentType;
+  label: string;
+  index: number;
+  content: React.ReactNode;
+}> = [
+  { key: 'EPISODES', label: 'episodes', index: 0, content: <Episodes /> },
+  { key: 'SUM-UP', label: 'sum-up', index: 1, content: <SumUp /> },
+];
 
 export default function HomePageComponent() {
   const [active, setActive] = useState<boolean>(false);
   const [scrollY, setScrollY] = useState<number>(0);
+  const [mainContent, setMaincontent] = useState<MainContentType>('EPISODES');
   const { data: session, update: updateSession } = useSession();
 
   const { isSuccess } = useQuery({
@@ -25,12 +31,6 @@ export default function HomePageComponent() {
     queryFn: async () =>
       await bffClient.post('/auth/login', { userId: session?.user.serviceUserId }),
     enabled: !!session?.user.needServiceLogin,
-  });
-
-  const { data: listData, status: listStatus } = useQuery({
-    queryKey: episodesKeys.base,
-    queryFn: getEpisodeListQueryFn,
-    enabled: !session?.user.needServiceLogin,
   });
 
   useEffect(() => {
@@ -97,60 +97,37 @@ export default function HomePageComponent() {
           />
           <ServiceTitle titleColor={active ? 'text-primary' : 'text-white'} />
         </div>
-        {active ? (
-          <>
-            <div
-              className="text-primary pb-2 transition-all duration-500"
-              style={{ paddingTop: scrollY > 40 ? '0px' : '20px' }}
-            >
-              <div
-                className={`flex flex-col w-full gap-2 items-center px-5 fixed z-20 pointer-events-none`}
-              >
-                <div
-                  className={`transition-all duration-250 ease-out h-full overflow-hidden `}
-                  style={{
-                    height: scrollY > 40 ? 0 : '100%',
-                    display: scrollY > 40 ? 'none' : 'block',
-                  }}
-                >
-                  내가 함께한 에피소드
-                </div>
-                <span
-                  className="text-3xl font-extralight transition-all duration-500 ease-out  "
-                  style={{ fontSize: scrollY > 40 ? '1.6rem' : '' }}
-                >
-                  <AnimatedCount target={listData?.episodes.length ?? 0} />
-                </span>
-              </div>
-            </div>
+        <div className="z-50 w-full flex justify-center fixed">
+          <div className="relative w-28 h-9">
+            {TABS.map(({ key, label }, i) => {
+              const isActive = key === mainContent;
+              const isScrolled = scrollY > 40;
+              const activeIndex = TABS.findIndex((t) => t.key === mainContent);
+              // w-28(112px) + gap-3(12px) = 124px
+              const tx = !isActive ? (i - activeIndex) * 124 : 0;
 
-            {listStatus === 'success' && listData ? (
-              <div className="pt-23 pb-30">
-                {listData.episodes.length === 0 ||
-                !isSameDay(listData.episodes[0].date, new Date()) ? (
-                  <AddTodayEpisode />
-                ) : null}
-                <EpisodeList episodes={listData.episodes} />
-              </div>
-            ) : (
-              <div className="flex items-center justify-center w-full absolute bottom-1/2">
-                <DotsLoader />
-              </div>
-            )}
-            <div
-              className="fixed bottom-4 right-4 transition-all duration-500 ease-in-out w-fit h-fit"
-              style={{
-                transform: scrollY > 300 ? 'translateY(0%)' : 'translateY(120%)',
-              }}
-            >
-              <Link href={'/episode/write'}>
-                <QuickButton />
-              </Link>
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+              return (
+                <div
+                  key={key}
+                  onClick={() => setMaincontent(key)}
+                  style={{ transform: `translateX(${tx}px)` }}
+                  className={`absolute inset-x-0 cursor-pointer rounded-full flex items-center justify-center transition-all duration-300 ease-out ${
+                    isActive
+                      ? isScrolled
+                        ? 'bg-transparent text-primary text-sm py-0'
+                        : 'border-2 border-solid border-primary bg-primary text-white py-1.5'
+                      : isScrolled
+                        ? 'border-2 border-dashed border-primary bg-transparent text-primary text-sm py-0 opacity-0 pointer-events-none'
+                        : 'border-2 border-dashed border-primary bg-white text-primary py-1.5'
+                  }`}
+                >
+                  {label}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {active ? <>{TABS.find((item) => item.key === mainContent)?.content}</> : null}
       </div>
     </>
   );

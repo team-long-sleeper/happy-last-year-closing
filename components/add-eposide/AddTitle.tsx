@@ -19,10 +19,10 @@ export default function AddTitle() {
   };
 
   return (
-    <div className="flex items-center gap-4 pl-16 pr-5 pb-4">
+    <div className="flex items-center gap-4 pl-16 pr-5 pb-2">
       <Icon icon={BookmarkIcon} />
       <input
-        className="text-2xl w-full placeholder:text-primary-sub outline-none text-text-default"
+        className="text-xl w-full placeholder:text-primary-sub outline-none text-text-default"
         placeholder="에피소드 제목"
         onChange={onHandleOnchange}
         value={title}

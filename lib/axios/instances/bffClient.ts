@@ -1,11 +1,12 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { signOut } from 'next-auth/react';
-console.log('bff AxiosInstance module loaded');
+import * as qs from 'qs';
 
 const bffClient: AxiosInstance = axios.create({
   baseURL: '/api',
   withCredentials: true,
   timeout: 15_000,
+  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
 });
 
 bffClient.interceptors.response.use(

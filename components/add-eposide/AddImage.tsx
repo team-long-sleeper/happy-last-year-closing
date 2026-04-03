@@ -24,7 +24,7 @@ export default function AddImage() {
   }, [editingEpisode]);
 
   return (
-    <div className="relative flex flex-col w-full gap-2 pb-12">
+    <div className="relative flex flex-col w-full gap-2 pb-9">
       <div className="flex items-start gap-4 pl-16">
         <div className="relative">
           <Icon icon={ImageIcon} />
