@@ -6,7 +6,7 @@ import staticsService from '@/app/api/statics/client';
 const useGetStaticsQuery = (params: GetStaticsParam) => {
   return useQuery({
     queryKey: staticsKeys.withParam(params),
-    queryFn: () => staticsService.getSumUp(params),
+    queryFn: () => staticsService.getStatics(params),
   });
 };
 
