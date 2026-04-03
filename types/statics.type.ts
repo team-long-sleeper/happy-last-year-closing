@@ -33,7 +33,7 @@ const StaticsTopPlaces = z.object({
 
 const TagType = z.object({
   id: z.number(),
-  name: z.string(),
+  label: z.string(),
 });
 
 const StaticsTopTags = z.object({

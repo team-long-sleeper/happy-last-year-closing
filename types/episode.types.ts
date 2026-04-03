@@ -1,4 +1,5 @@
 import z from 'zod';
+import { Tag } from './tag.type';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ImageMetaData {
@@ -77,6 +78,9 @@ export const EpisodeCreateReqSchema = z.object({
   matesId: z.array(z.string()).default([]),
   place: PlaceSchema,
   pictures: z.array(newPicturesReqSchema).max(5),
+  // optional 로 하는거랑 default[] 로 하는거랑 무슨차이?
+  // 일단 undefined 에러나는거 싫어서 default 처리하긴함
+  tags: z.array(z.string()).default([]),
 });
 
 export const EpisodeUpdateReqSchema = EpisodeCreateReqSchema.extend({
@@ -90,6 +94,7 @@ export const EpisodeResSchema = z.object({
   memo: z.string().max(150),
   date: z.string().min(1),
   mates: z.array(MateSchema.omit({ profileImage: true })).default([]),
+  tags: z.array(Tag),
   place: PlaceSchema.pick({ name: true }),
   pictures: z.array(EpisodePictureSchema),
   coverUrl: z.url(),

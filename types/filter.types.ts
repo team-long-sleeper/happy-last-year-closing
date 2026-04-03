@@ -6,7 +6,6 @@ export type DateFilterData = {
 export type ContactFilterData = {
   id: string;
   name: string;
-  profileImage: string;
 };
 
 export type PlaceFilterData = {
@@ -55,11 +54,21 @@ export type FilterItem =
   | TagFilterItem
   | EmptyFilterItem;
 
+export type ContactFilerType = ContactFilterData[];
+export type TagFilterType = TagFilterData[];
+
+export type FilterParams = {
+  startDate?: string | null;
+  endDate?: string | null;
+  contactIds?: string[]; // string[] 그대로
+  placeIds?: number[];
+  tagIds?: number[];
+};
 /** FilterItem[]을 백엔드 query params로 변환한 결과 */
 export type FilterQuery = {
   startDate?: string;
   endDate?: string;
   contactIds?: string; // comma-separated UUIDs
-  placeIds?: string;   // comma-separated ints
-  tagIds?: string;     // comma-separated ints
+  placeIds?: string; // comma-separated ints
+  tagIds?: string; // comma-separated ints
 };
