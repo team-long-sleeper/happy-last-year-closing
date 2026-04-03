@@ -11,7 +11,7 @@ export default function SumUp() {
 
   return (
     <div>
-      <div className="pt-15">
+      <div className="pt-15 pb-25">
         {statics ? (
           <div className="relative">
             <div className="pl-5 pb-8 flex gap-2 items-center">
@@ -72,7 +72,7 @@ export default function SumUp() {
                     key={item.tag.id}
                     count={item.episodeCount}
                     img={item.thumbnailUrl}
-                    title={item.tag.name}
+                    title={item.tag.label}
                     type="TAG"
                     ranking={index + 1}
                   />
@@ -81,7 +81,7 @@ export default function SumUp() {
             </div>
           </div>
         ) : (
-          <div className="flex w-full items-center justify-center">
+          <div className="absolute left-1/2 top-1/2 -translate-1/2 ">
             <DotsLoader />
           </div>
         )}

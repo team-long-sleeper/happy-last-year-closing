@@ -12,7 +12,7 @@ export default function Header({ title }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <div className="w-full flex items-center gap-5 px-5 py-10 text-primary">
+    <div className="w-full flex items-center gap-5 px-5 py-8 text-primary">
       <Icon icon={ArrowBackIcon} onClickFunc={() => router.back()} /> {title}
     </div>
   );
