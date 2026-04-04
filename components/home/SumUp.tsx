@@ -1,10 +1,7 @@
 import MyEpisodesHeader from './MyEpsiodesHeader';
 import DotsLoader from '@components/common/loading/DotsLoader';
 import TopContent from './TopContents';
-import Icon from '@components/common/Icon';
-import { TuneIcon } from '@assets/icons';
 import useGetStaticsQuery from '@/query/statics/useGetStatics.query';
-import FilteringOptions from '@components/common/filtering/FilteringOptions';
 
 export default function SumUp() {
   const { data: statics } = useGetStaticsQuery({});
@@ -14,10 +11,10 @@ export default function SumUp() {
       <div className="pt-15 pb-25">
         {statics ? (
           <div className="relative">
-            <div className="pl-5 pb-8 flex gap-2 items-center">
+            {/* <div className="pl-5 pb-8 flex gap-2 items-center">
               <Icon icon={TuneIcon} iconColor="default" />
               <FilteringOptions />
-            </div>
+            </div> */}
 
             <MyEpisodesHeader count={statics.summary.totalEpisodes} />
             <div className="grid grid-cols-3 gap-4 px-5 pt-5.5">
