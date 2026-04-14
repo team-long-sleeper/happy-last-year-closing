@@ -2,6 +2,7 @@
 
 import episodeService from '@/app/api/episodes/client';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { episodesKeys } from '@/query/key/episodes';
 import Button from '@common/buttons/Button';
 import { Modal } from '@common/modal/template';
 import ModalButton from '@common/modal/template/ModalButton';
@@ -23,7 +24,7 @@ export default function DeleteCheckModal({
   const episodeDeleteMutation = useMutation({
     mutationFn: episodeService.deleteEpisode,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['episodes'] });
+      queryClient.invalidateQueries({ queryKey: episodesKeys.base });
     },
   });
   const onClickCancel = () => {

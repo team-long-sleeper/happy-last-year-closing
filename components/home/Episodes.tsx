@@ -21,6 +21,18 @@ export default function Episodes() {
     enabled: !session?.user.needServiceLogin,
   });
 
+  useEffect(() => {
+    if (listStatus !== 'success' || !listData) return;
+
+    const savedScrollY = sessionStorage.getItem('episodeListScrollY');
+    if (savedScrollY) {
+      sessionStorage.removeItem('episodeListScrollY');
+      requestAnimationFrame(() => {
+        window.scrollTo(0, Number(savedScrollY));
+      });
+    }
+  }, [listStatus, listData]);
+
   const handleDocumentScroll = () => {
     setScrollY(window.scrollY);
   };

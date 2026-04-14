@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { bffClient } from '@/lib/axios/instances';
 import ServiceTitle from '@components/title/ServiceTitle';
@@ -9,6 +9,8 @@ import Episodes from './Episodes';
 import SumUp from './SumUp';
 
 type MainContentType = 'EPISODES' | 'SUM-UP';
+
+let hasShownIntro = false;
 
 const TABS: Array<{
   key: MainContentType;
@@ -21,9 +23,13 @@ const TABS: Array<{
 ];
 
 export default function HomePageComponent() {
-  const [active, setActive] = useState<boolean>(false);
+  const [active, setActive] = useState(hasShownIntro);
+  const [showOverlay, setShowOverlay] = useState(!hasShownIntro);
   const [scrollY, setScrollY] = useState<number>(0);
+  const [isTabCollapsed, setIsTabCollapsed] = useState(false);
   const [mainContent, setMaincontent] = useState<MainContentType>('EPISODES');
+  const [introBounce, setIntroBounce] = useState(false);
+  const prevScrollYRef = useRef(0);
   const { data: session, update: updateSession } = useSession();
 
   const { isSuccess } = useQuery({
@@ -34,10 +40,11 @@ export default function HomePageComponent() {
   });
 
   useEffect(() => {
-    if (session?.user.needServiceLogin) return;
+    if (session?.user.needServiceLogin || hasShownIntro) return;
 
     const timer = setTimeout(() => {
       setActive(true);
+      hasShownIntro = true;
     }, 500);
 
     return () => clearTimeout(timer);
@@ -54,7 +61,18 @@ export default function HomePageComponent() {
   }, [isSuccess, session?.user.needServiceLogin]);
 
   const handleDocumentScroll = () => {
-    setScrollY(window.scrollY);
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY <= 40) {
+      setIsTabCollapsed(false);
+    } else if (currentScrollY < prevScrollYRef.current) {
+      setIsTabCollapsed(false);
+    } else if (currentScrollY > prevScrollYRef.current) {
+      setIsTabCollapsed(true);
+    }
+
+    prevScrollYRef.current = currentScrollY;
+    setScrollY(currentScrollY);
   };
 
   const handleDocumentTouchMove = () => {
@@ -74,16 +92,24 @@ export default function HomePageComponent() {
 
   return (
     <>
-      <div
-        className={`fixed w-dvw h-dvh bg-primary-diamond-gradient transform-all duration-700 ease-in-out -z-10 ${
-          active ? 'translate-y-full' : ''
-        }`}
-      />
+      {showOverlay && (
+        <div
+          className={`fixed w-dvw h-dvh bg-primary-diamond-gradient transition-all duration-700 ease-in-out -z-10 ${
+            active ? 'translate-y-full' : ''
+          }`}
+          onTransitionEnd={() => {
+            setShowOverlay(false);
+            setIntroBounce(true);
+            setTimeout(() => setIntroBounce(false), 900);
+          }}
+        />
+      )}
       <div className="w-full h-full relative">
         <div
-          className={`w-full flex items-center transition-[height] duration-700 ease-in-out  ${
+          className={`group relative w-full flex items-center cursor-pointer transition-[height] duration-700 ease-in-out  ${
             active ? 'h-23.75' : 'h-full'
           }`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <div
             id="bg"
@@ -95,13 +121,13 @@ export default function HomePageComponent() {
                   : undefined,
             }}
           />
-          <ServiceTitle titleColor={active ? 'text-primary' : 'text-white'} />
+          <ServiceTitle titleColor={active ? 'text-primary' : 'text-white'} bounce={introBounce} />
         </div>
         <div className="z-50 w-full flex justify-center fixed">
           <div className="relative w-28 h-9">
             {TABS.map(({ key, label }, i) => {
               const isActive = key === mainContent;
-              const isScrolled = scrollY > 40;
+              const isScrolled = isTabCollapsed;
               const activeIndex = TABS.findIndex((t) => t.key === mainContent);
               // w-28(112px) + gap-3(12px) = 124px
               const tx = !isActive ? (i - activeIndex) * 124 : 0;
