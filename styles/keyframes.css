@@ -23,6 +23,19 @@
   --animate-slide-down: slide-down 1s ease-in;
 }
 
+@keyframes pop-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(-5px);
+  }
+}
+
 @keyframes toastIn {
   from {
     opacity: 0;
