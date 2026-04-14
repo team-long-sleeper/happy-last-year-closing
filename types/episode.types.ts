@@ -56,6 +56,7 @@ const MateSchema = z.object({
 export const newPicturesReqSchema = z.object({
   type: z.literal('new'),
   key: z.string(),
+  iv: z.string(),
   order: z.number(),
 });
 

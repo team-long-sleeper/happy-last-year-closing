@@ -1,14 +1,20 @@
 import { bffClient } from '@/lib/axios/instances';
-import { GetPresignedURLReq, GetPresignedURLRes } from '@/types/uploads.type';
+import { UploadPicturesRes } from '@/types/uploads.type';
 
 class UploadsService {
-  async getPresignedURL(mimeType: GetPresignedURLReq): Promise<GetPresignedURLRes> {
+  async uploadPictures(files: { file: File; order: number }[]): Promise<UploadPicturesRes> {
+    const formData = new FormData();
+    files.forEach(({ file }) => formData.append('files', file));
+
     return await bffClient
-      .post('/uploads/presign', { ...mimeType })
-      .then((response) => {
-        return response.data;
+      .post('/uploads/pictures', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
-      .catch((error) => {});
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
   }
 }
 

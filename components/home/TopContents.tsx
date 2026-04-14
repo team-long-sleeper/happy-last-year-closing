@@ -39,6 +39,7 @@ export default function TopContent({ type, img, title, count, ranking }: TopCont
             loading="eager"
             sizes="350px"
             className="absolute object-cover"
+            unoptimized
             alt={`${title}`}
           />
         </div>

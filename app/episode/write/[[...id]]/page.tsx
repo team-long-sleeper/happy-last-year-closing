@@ -11,7 +11,6 @@ import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import useImageMetaData from '@/stores/imageMetaDataStore';
 import { useMutation } from '@tanstack/react-query';
 import uploadsService from '../../../api/uploads/client';
-import { putUploads } from '@/lib/uploads';
 import episodeService from '../../../api/episodes/client';
 import {
   EpisodeImages,
@@ -34,12 +33,6 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
   const { resetMetadata } = useImageMetaData();
   const [, setLoading] = useState<boolean>(false);
   const { push } = useRouter();
-
-  const presignMutation = useMutation({
-    mutationFn: async (mimeTypes: string[]) => {
-      return await uploadsService.getPresignedURL({ mimeTypes });
-    },
-  });
 
   const episodeCreateMutation = useMutation({
     mutationFn: async (episodeBody: EpisodeReqBody) => {
@@ -76,12 +69,16 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     newImages: { file: File; order: number }[],
   ): Promise<PictureCreateReq[]> => {
     if (newImages.length === 0) return [];
-    const mimeType = newImages.map((image) => image.file.type);
-    const presignResponse = await presignMutation.mutateAsync(mimeType);
 
-    const uploadedImages = await putUploads(presignResponse, newImages);
+    const res = await uploadsService.uploadPictures(newImages);
+    if (!res) throw new Error('이미지 업로드에 실패했습니다.');
 
-    return uploadedImages;
+    return res.uploads.map((u, i) => ({
+      type: 'new',
+      key: u.key,
+      iv: u.iv,
+      order: newImages[i].order,
+    }));
   };
 
   const filteringNewAndOriginals = (images: EpisodeImages[]) => {

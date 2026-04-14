@@ -68,7 +68,7 @@ export default function SumUp() {
                   <TopContent
                     key={item.tag.id}
                     count={item.episodeCount}
-                    img={item.thumbnailUrl}
+                    img={item.thumbnail.url}
                     title={item.tag.label}
                     type="TAG"
                     ranking={index + 1}

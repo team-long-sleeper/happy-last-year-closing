@@ -228,6 +228,7 @@ export default function EpisodeImagesContainer() {
                 className="size-26.5 object-cover border border-primary"
                 sizes="106px"
                 loading="eager"
+                unoptimized
                 alt={image.name ?? `${image.id}`}
               />
             </div>
@@ -250,6 +251,7 @@ export default function EpisodeImagesContainer() {
               className="size-26.5 object-cover border border-primary"
               sizes="(max-width: 768px) 100vw, 50vw"
               loading="eager"
+              unoptimized
               alt=""
             />
           </div>

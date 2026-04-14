@@ -27,6 +27,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
   };
 
   const onEditEpisode = (id: string) => {
+    sessionStorage.setItem('episodeListScrollY', String(window.scrollY));
     push(`/episode/write/${id}`);
   };
 
