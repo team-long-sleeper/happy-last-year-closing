@@ -36,10 +36,16 @@ const TagType = z.object({
   label: z.string(),
 });
 
+const Thumbnail = z.object({
+  id: z.number,
+  order: z.number(),
+  url: z.string(),
+});
+
 const StaticsTopTags = z.object({
   tag: TagType,
   episodeCount: z.number(),
-  thumbnailUrl: z.httpUrl(),
+  thumbnail: Thumbnail,
 });
 
 const StaticSummary = z.object({

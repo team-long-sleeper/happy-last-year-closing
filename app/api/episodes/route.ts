@@ -23,5 +23,13 @@ export async function GET(req: NextRequest) {
     method: 'GET',
   });
 
+  if (data?.episodes) {
+    for (const ep of data.episodes) {
+      for (const pic of ep.pictures ?? []) {
+        pic.url = pic.url.replace('/episodes/pictures/', '/api/episodes/pictures/');
+      }
+    }
+  }
+
   return applySetCookie(NextResponse.json(data, { status }), setCookie);
 }

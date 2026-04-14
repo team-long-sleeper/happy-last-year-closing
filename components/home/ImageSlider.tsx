@@ -34,6 +34,7 @@ export default function ImageSlider({ images, currentIndex, setCurrentIndex }: I
                 alt={`${img.order}번 째 이미지`}
                 sizes="350px"
                 fill
+                unoptimized
                 className="absolute object-cover"
               />
             </div>

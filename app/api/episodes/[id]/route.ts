@@ -10,6 +10,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     method: 'GET',
   });
 
+  if (data?.pictures) {
+    for (const pic of data.pictures) {
+      pic.url = pic.url.replace('/episodes/pictures/', '/api/episodes/pictures/');
+    }
+  }
+
   return applySetCookie(NextResponse.json(data, { status }), setCookie);
 }
 
