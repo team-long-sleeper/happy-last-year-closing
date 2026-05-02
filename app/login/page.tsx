@@ -1,13 +1,13 @@
-import Landing from '@common/Landing';
+import Landing from '@components/common/Landing';
 import LoginButton from '@components/login/LoginButton';
 
 export default function Login() {
   return (
     <>
-      <div className="fixed bottom-20 left-1/2 -translate-x-1/2 w-75">
+      <div className="fixed bottom-20 left-1/2 -translate-x-1/2 w-75 z-100">
         <LoginButton />
       </div>
-      <Landing />
+      <Landing isMounted={false} />
     </>
   );
 }
