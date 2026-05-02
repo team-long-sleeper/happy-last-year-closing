@@ -3,7 +3,6 @@ import Icon from '@common/Icon';
 import ModalLayer from '@common/modal';
 import { useEffect, useState } from 'react';
 import AddPlaceModal from './AddPlaceModal';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
@@ -12,7 +11,6 @@ export default function AddPlace() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { data: editingEpisode } = useGetEpisodeQuery();
   const { place, setPlace } = useEpisodeDataStore();
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!editingEpisode) return;
@@ -30,7 +28,7 @@ export default function AddPlace() {
       <ModalLayer
         open={openModal}
         onClose={() => setOpenModal(false)}
-        variant={isMobile ? 'fullscreen' : 'modal'}
+        mobileVariant="fullscreen"
       >
         <AddPlaceModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>

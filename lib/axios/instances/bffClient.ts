@@ -11,16 +11,9 @@ const bffClient: AxiosInstance = axios.create({
 
 bffClient.interceptors.response.use(
   (res) => {
-    console.log('bff clients res --------------------------------------------->', res);
     return res;
   },
   (error: AxiosError) => {
-    console.log('interceptors error --------------------------------------------->');
-    console.log(error.code);
-    console.log(error);
-    console.log(error.status);
-    console.log(error.response);
-
     if (
       error.status === 401 &&
       typeof error.response?.data === 'object' &&
@@ -33,7 +26,5 @@ bffClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-console.log('bff interceptors module loaded');
 
 export default bffClient;

@@ -6,7 +6,6 @@ import { ko } from 'date-fns/locale';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import ModalLayer from '@common/modal';
 import { Modal } from './modal/template';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import DatePicker from './DatePicker';
 
 export const DATE_FORMAT = {
@@ -26,7 +25,6 @@ type InputProps = { placeholder?: string };
 export default function DateInput({ placeholder = '에피소드 날짜' }: InputProps) {
   const [open, setOpen] = useState(false);
   const { date } = useEpisodeDataStore();
-  const isMobile = useIsMobile();
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -57,8 +55,8 @@ export default function DateInput({ placeholder = '에피소드 날짜' }: Input
           </span>
         </button>
 
-        <ModalLayer open={open} onClose={handleClose} variant="modal">
-          <Modal variant={isMobile ? 'fullscreen' : 'modal'}>
+        <ModalLayer open={open} onClose={handleClose} mobileVariant="fullscreen">
+          <Modal>
             <Modal.Title onClose={handleClose}>에피소드 날짜 선택하기</Modal.Title>
             <Modal.Content>
               <DatePicker onConfirmFn={handleClose} />

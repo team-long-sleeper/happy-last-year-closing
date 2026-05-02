@@ -5,9 +5,14 @@ declare module 'next-auth' {
   interface Session {
     user: DefaultSession['user'] & {
       serviceUserId?: string;
+      username?: string;
+      userProfileImage?: string;
       serviceLoginError?: boolean;
       needServiceLogin: boolean;
-      serviceAuthenticated: boolean;
+      status?: 'ACCOUNT_DELETION_PENDING';
+      deletedAt?: string;
+      gracePeriodEndsAt?: string;
+      restoreToken?: string;
     };
   }
 
@@ -17,8 +22,13 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     serviceUserId?: string;
+    username?: string;
+    userProfileImage?: string;
     serviceLoginError?: boolean;
     needServiceLogin?: boolean;
-    serviceAuthenticated: boolean;
+    status?: 'ACCOUNT_DELETION_PENDING';
+    deletedAt?: string;
+    gracePeriodEndsAt?: string;
+    restoreToken?: string;
   }
 }

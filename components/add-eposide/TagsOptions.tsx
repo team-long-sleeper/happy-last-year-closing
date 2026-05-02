@@ -55,7 +55,7 @@ export default function TagsOptiopns({ searchTag, setSearchTag }: TagsOptionsPro
 
   return (
     <div className="flex gap-2">
-      {!tagAlreadyExists ? (
+      {!searchTag && !availableTags.length ? null : !tagAlreadyExists ? (
         <Tag
           onClick={() => {
             onClickAddTag(searchTag);

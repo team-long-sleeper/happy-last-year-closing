@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 interface TitleProps {
-  titleColor: 'text-primary' | 'text-white';
   bounce?: boolean;
 }
 
@@ -29,19 +28,14 @@ function randomize(): WordStyle[] {
   }));
 }
 
-export default function ServiceTitle({ titleColor, bounce }: TitleProps) {
+export default function ServiceTitle({ bounce }: TitleProps) {
   const [words, setWords] = useState<WordStyle[]>(INITIAL_WORDS);
   const shuffle = () => setWords(randomize());
 
   return (
-    <div
-      className="mx-auto fixed -translate-x-1/2 left-1/2 z-50 w-fit"
-      id="service-title"
-      onClick={shuffle}
-      onTouchStart={shuffle}
-    >
+    <div id="service-title" onClick={shuffle} onTouchStart={shuffle}>
       <div
-        className={`px-5 flex gap-1 justify-between whitespace-nowrap ${titleColor} text-en-36 font-extralight`}
+        className={`py-4 text-center px-5 flex gap-2 justify-between whitespace-nowrap text-primary text-en-36 font-extralight`}
       >
         {words.map(({ text, rotate, translateY }, i) => (
           <div

@@ -1,7 +1,6 @@
 'use client';
 
 import episodeService from '@/app/api/episodes/client';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { episodesKeys } from '@/query/key/episodes';
 import Button from '@common/buttons/Button';
 import { Modal } from '@common/modal/template';
@@ -19,7 +18,6 @@ export default function DeleteCheckModal({
   closeModal,
   id,
 }: DeleteCheckModalProps & ModalDefaultProps) {
-  const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const episodeDeleteMutation = useMutation({
     mutationFn: episodeService.deleteEpisode,
@@ -37,7 +35,7 @@ export default function DeleteCheckModal({
   };
 
   return (
-    <Modal variant={isMobile ? 'bottomsheet' : 'modal'}>
+    <Modal>
       <Modal.Title onClose={closeModal}>에피소드 삭제</Modal.Title>
       <Modal.Content>
         <div className="px-5 pb-10">{title} 에피소드를 삭제하시겠습니까?</div>
