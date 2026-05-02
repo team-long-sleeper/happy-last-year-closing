@@ -15,6 +15,11 @@ import ListIcon from '@assets/icons/list.svg';
 import TagIcon from '@assets/icons/tag.svg';
 import RankingIcon from '@assets/icons/ranking.svg';
 import TuneIcon from '@assets/icons/tune.svg';
+import MenuIcon from '@assets/icons/menu.svg';
+import PersonIcon from '@assets/icons/person.svg';
+import DocIcon from '@assets/icons/doc.svg';
+import BadMoodFaceIcon from '@assets/icons/badMoodFace.svg';
+import CupOfTeaIcon from '@assets/icons/cupOfTea.svg';
 
 export {
   CalendarIcon,
@@ -34,4 +39,9 @@ export {
   TagIcon,
   RankingIcon,
   TuneIcon,
+  MenuIcon,
+  PersonIcon,
+  DocIcon,
+  BadMoodFaceIcon,
+  CupOfTeaIcon,
 };
