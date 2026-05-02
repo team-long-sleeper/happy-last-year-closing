@@ -39,7 +39,6 @@ class EpisodeService {
   }
 
   async updateEpisode(id: string, episodeBody: EpisodeUpdateReqBody) {
-    console.log({ ...episodeBody });
     return await bffClient
       .patch(`/episodes/${id}`, { ...episodeBody })
       .then((response) => response.data)
