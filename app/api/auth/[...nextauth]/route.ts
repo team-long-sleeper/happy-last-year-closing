@@ -8,7 +8,13 @@ export const authOptions: AuthOptions = {
     async jwt({ token, account, trigger, session }) {
       if (trigger === 'update') {
         token.needServiceLogin = session.user.needServiceLogin;
-        token.serviceAuthenticated = session.user.serviceAuthenticated;
+
+        if (session.user.clearRestore) {
+          token.status = undefined;
+          token.deletedAt = undefined;
+          token.gracePeriodEndsAt = undefined;
+          token.restoreToken = undefined;
+        }
       }
 
       if (trigger === 'signIn' && account) {
@@ -30,21 +36,41 @@ export const authOptions: AuthOptions = {
           token.serviceLoginError = true;
         }
 
-        const data = (await result.json()) as { user: { id: string } };
+        const data = (await result.json()) as {
+          user: { id: string; profileImage: string; name: string };
+          status?: 'ACCOUNT_DELETION_PENDING';
+          deletedAt?: string;
+          gracePeriodEndsAt?: string;
+          restoreToken?: string;
+        };
 
         token.serviceUserId = data.user.id;
-        token.serviceLoginError = false;
+        token.userProfileImage = data.user.profileImage;
+        token.username = data.user.name;
         token.needServiceLogin = true;
-        token.serviceAuthenticated = false;
+
+        if (data.status === 'ACCOUNT_DELETION_PENDING') {
+          token.status = 'ACCOUNT_DELETION_PENDING';
+          token.deletedAt = data.deletedAt;
+          token.gracePeriodEndsAt = data.gracePeriodEndsAt;
+          token.restoreToken = data.restoreToken;
+          return token;
+        }
+
+        token.serviceLoginError = false;
       }
 
       return token;
     },
     async session({ session, token }) {
       session.user.serviceUserId = token.serviceUserId;
+      session.user.userProfileImage = token.userProfileImage;
       session.user.serviceLoginError = token.serviceLoginError;
       session.user.needServiceLogin = token.needServiceLogin ?? false;
-      session.user.serviceAuthenticated = token.serviceAuthenticated ?? false;
+      session.user.status = token.status ?? undefined;
+      session.user.deletedAt = token.deletedAt ?? undefined;
+      session.user.gracePeriodEndsAt = token.gracePeriodEndsAt ?? undefined;
+      session.user.restoreToken = token.restoreToken ?? undefined;
 
       return session;
     },
