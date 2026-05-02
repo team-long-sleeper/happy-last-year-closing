@@ -21,7 +21,7 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
   return (
     <div className={`gap-2 flex flex-col items-center`}>
       <div
-        className="size-17 bg-white rounded-full relative"
+        className="size-17 bg-white rounded-full relative overflow-hidden"
         onMouseEnter={onHoverToggle}
         onMouseLeave={onHoverToggle}
         onClick={() => (onToggleMate ? onToggleMate(mate) : undefined)}
@@ -41,7 +41,7 @@ export default function MateProfile({ mate, onToggleMate }: MateProfileProps) {
             src={mate.profileImage}
             alt={`${mate.name}님의 프로필 사진`}
             fill
-            className="object-contain"
+            className="object-cover absolute"
             sizes="68px"
           />
         )}

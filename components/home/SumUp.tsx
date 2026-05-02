@@ -8,30 +8,28 @@ export default function SumUp() {
 
   return (
     <div>
-      <div className="pt-15 pb-25">
+      <div className="pt-10 pb-25">
         {statics ? (
           <div className="relative">
             {/* <div className="pl-5 pb-8 flex gap-2 items-center">
               <Icon icon={TuneIcon} iconColor="default" />
               <FilteringOptions />
             </div> */}
-
             <MyEpisodesHeader count={statics.summary.totalEpisodes} />
-            <div className="grid grid-cols-3 gap-4 px-5 pt-5.5">
+            <div className="grid grid-cols-3 gap-2 px-5 pt-5.5">
               <div className="border border-primary px-4 flex flex-col gap-2 py-3">
                 <span>친구</span>
-                <span>{statics.summary.uniqueContacts} </span>
+                <span>{statics.summary.uniqueContacts} 명</span>
               </div>
               <div className="border border-primary px-4 flex flex-col gap-2 py-3">
                 <span>장소</span>
-                <span>{statics.summary.uniquePlaces} </span>
+                <span>{statics.summary.uniquePlaces} 곳</span>
               </div>
               <div className="border border-primary px-4 flex flex-col gap-2 py-3">
                 <span>월 평균</span>
-                <span>{statics.summary.monthlyAverage} </span>
+                <span>{statics.summary.monthlyAverage} 번</span>
               </div>
             </div>
-
             <div className="pl-5 pt-7.5">
               <div className="flex overflow-x-scroll overflow-y-hidden gap-2 pr-10">
                 {statics.topContacts.map((item, index) => (
@@ -46,7 +44,6 @@ export default function SumUp() {
                 ))}
               </div>
             </div>
-
             <div className="pl-5 pt-7.5">
               <div className="flex overflow-x-scroll overflow-y-hidden gap-2 pr-10">
                 {statics.topPlaces.map((item, index) => (
@@ -61,7 +58,6 @@ export default function SumUp() {
                 ))}
               </div>
             </div>
-
             <div className="pl-5 pt-7.5">
               <div className="flex overflow-x-scroll overflow-y-hidden gap-2 pr-10">
                 {statics.topTags.map((item, index) => (

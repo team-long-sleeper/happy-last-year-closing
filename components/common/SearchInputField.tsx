@@ -11,6 +11,7 @@ export default function SearchInputField({ value, placeholder, onChange }: Searc
   return (
     <div className="border-b-2 border-primary flex justify-end ">
       <input
+        autoFocus
         placeholder={placeholder}
         type="search"
         className="w-full pl-3 outline-none placeholder:text-primary-sub"

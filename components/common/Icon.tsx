@@ -1,8 +1,9 @@
 import { IconComponentType } from '@/types/mates.types';
+import { SizeVariant } from '@type/ui.types';
 
 interface IconProps {
   icon: IconComponentType;
-  size?: 's' | 'm' | 'l';
+  size?: SizeVariant;
   onClickFunc?: () => void;
   iconColor?: string;
   hoverColor?: string;
@@ -15,20 +16,20 @@ export default function Icon({
   hoverColor = 'white',
   size = 'm',
 }: IconProps) {
-  const sizeClass = {
+  const sizeClass: Record<SizeVariant, string> = {
     s: 'w-3 h-3',
     m: 'w-6 h-6',
     l: 'w-8 h-8',
-  }[size];
+  };
 
   const colorClass = `text-${iconColor} hover:text-${hoverColor}`;
 
   return (
     <div
       onClick={onClickFunc}
-      className={`${onClickFunc ? ' hover:bg-primary cursor-pointer' : ''}`}
+      className={`${onClickFunc ? ' hover:bg-primary cursor-pointer' : ''} active:bg-gray/25`}
     >
-      <SVGComponent className={`${sizeClass} ${colorClass}`} />
+      <SVGComponent className={`${sizeClass[size]} ${colorClass}`} />
     </div>
   );
 }

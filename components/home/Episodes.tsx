@@ -50,7 +50,7 @@ export default function Episodes() {
   return (
     <>
       {listStatus === 'success' && listData ? (
-        <div className="pt-15 pb-30">
+        <div className="pb-30">
           {listData.episodes.length === 0 || !isSameDay(listData.episodes[0].date, new Date()) ? (
             <AddTodayEpisode />
           ) : null}

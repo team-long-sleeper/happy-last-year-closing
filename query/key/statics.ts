@@ -5,5 +5,5 @@ export const staticsKeys = {
   withParam: (params: GetStaticsParam) => [staticsKeys.base[0].scope, params] as const,
 };
 
-export type StaticsKeyType = (typeof staticsKeys.base)[number];
+export type StaticsKeyType = typeof staticsKeys.base;
 export type StaticsKeyWithParamsType = typeof staticsKeys.withParam;
