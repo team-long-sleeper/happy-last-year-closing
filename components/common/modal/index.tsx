@@ -1,12 +1,16 @@
 import { createPortal } from 'react-dom';
 import { Variant } from './template/ModalTemplate';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface ModalProps {
   open: boolean;
   children: React.ReactNode;
   onClose?: () => void;
+  /** 명시 시 모바일/데스크톱 구분 없이 고정. 미지정 시 자동 분기. */
   variant?: Variant;
+  /** 자동 분기 시 모바일에서 사용할 variant. 데스크톱은 'modal'로 고정. */
+  mobileVariant?: Variant;
 }
 
 const overlayStyles: Record<Variant, string> = {
@@ -15,7 +19,26 @@ const overlayStyles: Record<Variant, string> = {
   fullscreen: 'items-stretch',
 };
 
-export default function ModalLayer({ open, onClose, children, variant = 'modal' }: ModalProps) {
+const ModalVariantContext = createContext<Variant | null>(null);
+
+export function useModalVariant() {
+  const variant = useContext(ModalVariantContext);
+  if (variant === null) {
+    throw new Error('useModalVariant must be used within a ModalLayer');
+  }
+  return variant;
+}
+
+export default function ModalLayer({
+  open,
+  onClose,
+  children,
+  variant,
+  mobileVariant = 'bottomsheet',
+}: ModalProps) {
+  const isMobile = useIsMobile();
+  const resolvedVariant: Variant = variant ?? (isMobile ? mobileVariant : 'modal');
+
   const [visible, setVisible] = useState(open);
   const [mounted, setMounted] = useState(open);
 
@@ -48,21 +71,23 @@ export default function ModalLayer({ open, onClose, children, variant = 'modal' 
   const shouldRender = open || visible;
 
   const animationClass =
-    variant === 'bottomsheet'
+    resolvedVariant === 'bottomsheet'
       ? `transition-transform duration-300 ease-in-out ${mounted ? 'translate-y-0' : 'translate-y-full'}`
       : '';
 
   if (!shouldRender) return null;
 
   return createPortal(
-    <div
-      className={`fixed h-dvh w-dvw flex z-50 bg-white/70 ${overlayStyles[variant]}`}
-      onClick={variant === 'bottomsheet' && onClose ? onClose : undefined}
-    >
-      <div className={animationClass} onClick={(e) => e.stopPropagation()}>
-        {children}
+    <ModalVariantContext.Provider value={resolvedVariant}>
+      <div
+        className={`fixed h-dvh w-dvw flex z-50 bg-white/70 ${overlayStyles[resolvedVariant]}`}
+        onClick={resolvedVariant === 'bottomsheet' && onClose ? onClose : undefined}
+      >
+        <div className={animationClass} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
       </div>
-    </div>,
+    </ModalVariantContext.Provider>,
     document.getElementById('modal-root')!,
   );
 }

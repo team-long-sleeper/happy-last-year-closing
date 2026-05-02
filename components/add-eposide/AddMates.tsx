@@ -5,14 +5,12 @@ import AddMatesModal from './AddMatesModal';
 import ModalLayer from '@common/modal';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import MateProfile from './MateProfile';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 
 export default function AddFriends() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { mates, setMates } = useEpisodeDataStore();
   const { data: editingEpisode } = useGetEpisodeQuery();
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!editingEpisode) return;
@@ -34,7 +32,7 @@ export default function AddFriends() {
       <ModalLayer
         open={openModal}
         onClose={() => setOpenModal(false)}
-        variant={isMobile ? 'fullscreen' : 'modal'}
+        mobileVariant="fullscreen"
       >
         <AddMatesModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>

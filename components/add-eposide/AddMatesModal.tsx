@@ -7,12 +7,10 @@ import { Mate } from '@/types/mates.types';
 import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 import { ModalDefaultProps } from '@/types/modal.types';
 import Button from '@components/common/buttons/Button';
-import { useIsMobile } from '@/hooks/useIsMobile';
 
 export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
   const { mates, setMates } = useEpisodeDataStore();
   const [selected, setSelected] = useState<Map<string, Mate>>(mates);
-  const isMobile = useIsMobile();
 
   const onClickAddMates = () => {
     setMates(selected);
@@ -33,7 +31,7 @@ export default function AddMatesModal({ closeModal }: ModalDefaultProps) {
   };
 
   return (
-    <Modal variant={isMobile ? 'fullscreen' : 'modal'}>
+    <Modal>
       <Modal.Title onClose={closeModal}>에피소드에 친구 추가하기</Modal.Title>
       <Modal.Content>
         <div className="px-5 sm:pb-10">

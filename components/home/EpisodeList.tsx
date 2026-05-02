@@ -10,14 +10,12 @@ import ContextMenu from '@components/common/ContextMenu';
 import ModalLayer from '@components/common/modal';
 import DeleteCheckModal from './DeleteCheckModal';
 import { useState } from 'react';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 
 export default function EpisodeList({ episodes }: EpisodeListRes) {
   const { getHandlers, position, close, isOpen, selectedEpisode } = useContextMenu();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selected, setSelected] = useState<{ id: string; title: string } | null>();
-  const isMobile = useIsMobile();
   const { push } = useRouter();
 
   const onDeleteEpisode = (id: string, title: string) => {
@@ -34,11 +32,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
   return (
     <div className="w-full px-4">
       {selected && (
-        <ModalLayer
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          variant={isMobile ? 'bottomsheet' : 'modal'}
-        >
+        <ModalLayer open={openModal} onClose={() => setOpenModal(false)}>
           <DeleteCheckModal
             closeModal={() => setOpenModal(false)}
             title={selected.title}

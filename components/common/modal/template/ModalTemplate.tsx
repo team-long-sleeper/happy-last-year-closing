@@ -2,12 +2,12 @@ import { Children, isValidElement } from 'react';
 import ModalTitle from './ModalTitle';
 import ModalContent from './ModalContent';
 import ModalButton from './ModalButton';
+import { useModalVariant } from '../index';
 
 export type Variant = 'modal' | 'bottomsheet' | 'fullscreen';
 
 interface ModalTemplateProps {
   children: React.ReactNode;
-  variant: Variant;
 }
 const ModalTitleType = (<ModalTitle />).type;
 const ModalContentType = (<ModalContent />).type;
@@ -19,7 +19,9 @@ const variantStyles: Record<Variant, string> = {
   fullscreen: 'w-dvw h-dvh border-0 ',
 };
 
-export default function ModalTemplate({ children, variant }: ModalTemplateProps) {
+export default function ModalTemplate({ children }: ModalTemplateProps) {
+  const variant = useModalVariant();
+
   const title = Children.toArray(children).filter(
     (child) => isValidElement(child) && child.type === ModalTitleType,
   );
