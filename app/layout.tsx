@@ -1,19 +1,33 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
+import { getServerSession } from 'next-auth';
+import QueryProvider from '@components/providers/QueryProvider';
+import SessionProvider from '@components/providers/SessionProvider';
+import { authOptions } from './api/auth/[...nextauth]/route';
+import Toaster from '@components/common/toast';
 
 export const metadata: Metadata = {
-  title: "Happy Last Year Closing",
-  description: "에피소드 연말결산",
+  title: 'Happy Last Year Closing',
+  description: '에피소드 연말결산',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className="w-full h-dvh">{children}</body>
+      <body className="w-full h-dvh">
+        <SessionProvider session={session}>
+          <QueryProvider>
+            <Toaster />
+            <div id="modal-root" />
+            {children}
+          </QueryProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

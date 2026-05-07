@@ -1,21 +1,14 @@
-"use client";
-import { useRef } from "react";
-import Icon from "../common/Icon";
-import * as exifr from "exifr";
-import { UploadedImage } from "@/types/episode.types";
-import { AddIcon } from "@assets/icons";
-import useImageMetaData from "@/stores/imageMetaDataStore";
+'use client';
+import { useRef } from 'react';
+import Icon from '../common/Icon';
+import * as exifr from 'exifr';
+import { AddIcon } from '@assets/icons';
+import useImageMetaData from '@/stores/imageMetaDataStore';
+import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
 
-interface ImageUploaderProps {
-  images: UploadedImage[] | null;
-  setImages: (file: UploadedImage[]) => void;
-}
-
-export default function ImageUploader({
-  images,
-  setImages,
-}: ImageUploaderProps) {
+export default function ImageUploader() {
   const { setDate, setplaces } = useImageMetaData();
+  const { pictures, setPictures } = useEpisodeDataStore();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onClickUpload = () => {
@@ -35,41 +28,42 @@ export default function ImageUploader({
 
   const handleFiles = async (fileList: FileList) => {
     const uploadedImages = await Promise.all(
-      Array.from(fileList).map(async (file) => {
-        if (file.type === "image/heic" || file.name.endsWith(".heic")) {
-          const { default: heic2any } = await import("heic2any");
+      Array.from(fileList).map(async (file, index) => {
+        const order = (pictures?.length ?? 0) + (index + 1);
+        if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
+          const { default: heic2any } = await import('heic2any');
           const convertedBlob = await heic2any({
             blob: file,
-            toType: "image/jpeg",
+            toType: 'image/jpeg',
             quality: 0.9,
           });
 
           const convertedFile = new File(
             [convertedBlob as Blob],
-            file.name.replace(/\.heic$/i, ".jpg"),
-            { type: "image/jpeg" }
+            file.name.replace(/\.heic$/i, '.jpg'),
+            { type: 'image/jpeg' },
           );
 
           return {
-            original: file,
-            preview: URL.createObjectURL(convertedFile),
+            url: URL.createObjectURL(convertedFile),
             name: file.name,
             file: convertedFile,
+            order,
           };
         }
 
         return {
-          original: file,
-          preview: URL.createObjectURL(file),
+          url: URL.createObjectURL(file),
           name: file.name,
           file,
+          order,
         };
-      })
+      }),
     );
 
-    const newImages = images ? [...images, ...uploadedImages] : uploadedImages;
+    const newImages = pictures ? [...pictures, ...uploadedImages] : uploadedImages;
 
-    setImages(newImages);
+    setPictures(newImages);
   };
 
   const extractMetadata = async (file: File) => {
@@ -87,9 +81,7 @@ export default function ImageUploader({
       null;
 
     const gps =
-      data?.latitude && data?.longitude
-        ? { lat: data.latitude, lng: data.longitude }
-        : null;
+      data?.latitude && data?.longitude ? { lat: data.latitude, lng: data.longitude } : null;
 
     if (date) {
       const d = new Date(date);
@@ -106,7 +98,7 @@ export default function ImageUploader({
         onClick={onClickUpload}
         className="bg-primary size-26.5 h-full flex items-center justify-center cursor-pointer"
       >
-        <Icon src={AddIcon} size="m" content="에피소드 사진 추가" />
+        <Icon icon={AddIcon} />
       </div>
 
       <input
