@@ -81,7 +81,11 @@ export async function proxyToService(
       const refreshed = await tryRefresh({ ...filteredHeaders, ...baseHeaders });
 
       if (!refreshed.ok) {
-        console.log('refreshed  ❌❌❌❌❌');
+        console.log('refreshed  ❌❌❌❌❌', refreshed);
+
+        if (refreshed.data.error === 'REVOKED_REFRESH') {
+          return { status: 401, data: { code: 'AUTH_REQUIRED', message: 'Unauthenticated' } };
+        }
 
         return { status: 401, data: refreshed.data };
       }
