@@ -1,0 +1,27 @@
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.env*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.aws/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 60
+    window_size = 60  # 60초에 60회 = 초당 1회
+    aggregator = "ip"  # IP별 집계
