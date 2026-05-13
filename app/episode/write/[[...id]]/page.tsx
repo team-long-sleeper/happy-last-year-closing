@@ -3,55 +3,38 @@
 import Header from '@components/title/Header';
 import AddImage from '@components/add-eposide/AddImage';
 import AddFriends from '@components/add-eposide/AddMates';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import AddPlace from '@components/add-eposide/AddPlace';
 import AddDates from '@components/add-eposide/AddDates';
 import AddTitle from '@components/add-eposide/AddTitle';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import useImageMetaData from '@/stores/imageMetaDataStore';
-import { useMutation } from '@tanstack/react-query';
-import uploadsService from '../../../api/uploads/client';
-import episodeService from '../../../api/episodes/client';
-import {
-  EpisodeImages,
-  EpisodeReqBody,
-  EpisodeUpdateReqBody,
-  OriginalPictureType,
-  PictureCreateReq,
-} from '@/types/episode.types';
+import { EpisodeImages, OriginalPictureType } from '@/types/episode.types';
 import { useRouter } from 'next/navigation';
 import Button from '@components/common/buttons/Button';
 import AddMemo from '@components/add-eposide/AddMemo';
 import AddTag from '@components/add-eposide/AddTag';
+import {
+  useEpisodeCreateMutation,
+  useEpisodeUpdateMutation,
+} from '@/query/episodes/useEpisode.mutation';
+import DotsLoader from '@components/common/loading/DotsLoader';
 
 export default function AddEpisode({ params }: { params: Promise<{ id?: string[] }> }) {
   const { id } = React.use(params);
   const isEdit = !!id;
 
-  const { date, mates, place, title, pictures, tags, memo, deletedPictureId, resetEpisodeData } =
+  const { date, mates, place, title, pictures, tags, memo, resetEpisodeData } =
     useEpisodeDataStore();
   const { resetMetadata } = useImageMetaData();
-  const [, setLoading] = useState<boolean>(false);
   const { push } = useRouter();
 
-  const episodeCreateMutation = useMutation({
-    mutationFn: async (episodeBody: EpisodeReqBody) => {
-      return await episodeService.createEpisode(episodeBody);
-    },
-    onSuccess: () => {
-      setLoading(false);
-      push('/');
-    },
+  const { mutateAsync: updateEpisode, isPending: isUpdating } = useEpisodeUpdateMutation({
+    onSuccess: () => push('/'),
   });
 
-  const episodeUpdateMudation = useMutation({
-    mutationFn: async ({ id, episodeBody }: { id: string; episodeBody: EpisodeUpdateReqBody }) => {
-      return await episodeService.updateEpisode(id, episodeBody);
-    },
-    onSuccess: () => {
-      setLoading(false);
-      push('/');
-    },
+  const { mutateAsync: createEpisode, isPending: isCreating } = useEpisodeCreateMutation({
+    onSuccess: () => push('/'),
   });
 
   const isReadyToAdd = useMemo(() => {
@@ -64,22 +47,6 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
       resetMetadata();
     };
   }, []);
-
-  const uploadImageFiles = async (
-    newImages: { file: File; order: number }[],
-  ): Promise<PictureCreateReq[]> => {
-    if (newImages.length === 0) return [];
-
-    const res = await uploadsService.uploadPictures(newImages);
-    if (!res) throw new Error('이미지 업로드에 실패했습니다.');
-
-    return res.uploads.map((u, i) => ({
-      type: 'new',
-      key: u.key,
-      iv: u.iv,
-      order: newImages[i].order,
-    }));
-  };
 
   const filteringNewAndOriginals = (images: EpisodeImages[]) => {
     const { newImages, originalImages } = images.reduce<{
@@ -103,52 +70,43 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
     const episodeId = id[0];
 
     const { newImages, originalImages } = filteringNewAndOriginals(pictures);
-    const uploadedImages = await uploadImageFiles(newImages);
 
-    const matesId: string[] = [];
-    mates.forEach((_, key) => matesId.push(key));
-
-    const tagLabels = tags.map((item) => item.label);
-
-    const patchBody = {
-      title,
-      place,
-      date: date.toISOString(),
-      pictures: [...originalImages, ...uploadedImages],
-      matesId,
-      deletedPictureId,
-      memo,
-      tags: tagLabels,
-    };
-
-    await episodeUpdateMudation.mutateAsync({ id: episodeId, episodeBody: patchBody });
+    await updateEpisode({
+      id: episodeId,
+      newImages,
+      originalImages,
+      body: {
+        title,
+        date: date.toISOString(),
+        matesId: [...mates.keys()],
+        place,
+        memo,
+        tags: tags.map((t) => t.label),
+      },
+    });
   };
 
   const onClickAddEpisode = async () => {
     if (!pictures || !place || !date) return;
 
-    setLoading(true);
-
     const { newImages } = filteringNewAndOriginals(pictures);
-    const uploadedImages = await uploadImageFiles(newImages);
 
-    const matesId: string[] = [];
-    mates.forEach((_, key) => matesId.push(key));
-
-    const tagLabels = tags.map((item) => item.label);
-
-    const requestBody: EpisodeReqBody = {
-      title,
-      date: date.toISOString(),
-      matesId,
-      pictures: [...uploadedImages],
-      place,
-      memo,
-      tags: tagLabels,
-    };
-
-    await episodeCreateMutation.mutateAsync(requestBody);
+    await createEpisode({
+      newImages,
+      body: {
+        title,
+        date: date.toISOString(),
+        matesId: [...mates.keys()],
+        place,
+        memo,
+        tags: tags.map((t) => t.label),
+      },
+    });
   };
+
+  const isPending = isEdit ? isUpdating : isCreating;
+  const onSubmit = isEdit ? onClickEditEpisode : onClickAddEpisode;
+  const label = isEdit ? '수정' : '기록';
 
   return (
     <div className="h-dvh overflow-hidden">
@@ -163,15 +121,21 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
         <AddFriends />
       </div>
 
-      {isEdit ? (
-        <Button isBottomBtn isDisabled={!isReadyToAdd} onClickFunc={onClickEditEpisode}>
-          수정하기
-        </Button>
-      ) : (
-        <Button isBottomBtn isDisabled={!isReadyToAdd} onClickFunc={onClickAddEpisode}>
-          기록하기
-        </Button>
-      )}
+      <Button
+        isBottomBtn
+        isDisabled={!isReadyToAdd || isPending}
+        onClickFunc={onSubmit}
+        isLoading={isPending}
+      >
+        {isPending ? (
+          <div className=" flex justify-center">
+            에피소드 {label} 중&nbsp;
+            <DotsLoader color="#f9fafb" />
+          </div>
+        ) : (
+          `${label}하기`
+        )}
+      </Button>
     </div>
   );
 }
