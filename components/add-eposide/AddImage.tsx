@@ -1,11 +1,12 @@
 import Icon from '../common/Icon';
 import ImageUploader from '../uploaders/ImageUploader';
 import { ImageIcon } from '@assets/icons';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 import { useEffect } from 'react';
 import { EpisodeImages } from '@type/episode.types';
 import EpisodeImagesContainer from './EpisodeImagesContainer';
+import { MAX_PICTURES } from '@/lib/constants';
 
 export default function AddImage() {
   const { pictures, setPictures } = useEpisodeDataStore();
@@ -30,7 +31,7 @@ export default function AddImage() {
           <Icon icon={ImageIcon} />
 
           <span className="absolute right-0 top-7.5 text-primary text-right">
-            {pictures ? pictures.length : 0}/5
+            {pictures ? pictures.length : 0}/{MAX_PICTURES}
           </span>
         </div>
 
