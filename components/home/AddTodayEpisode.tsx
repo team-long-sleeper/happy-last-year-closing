@@ -1,4 +1,4 @@
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { formatSingleDate } from '@common/DateInput';
 import Link from 'next/link';
 

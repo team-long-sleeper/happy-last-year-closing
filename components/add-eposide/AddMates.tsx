@@ -3,7 +3,7 @@ import { MateIcon, AddIcon } from '@assets/icons';
 import { useEffect, useState } from 'react';
 import AddMatesModal from './AddMatesModal';
 import ModalLayer from '@common/modal';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import MateProfile from './MateProfile';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 
@@ -29,11 +29,7 @@ export default function AddFriends() {
 
   return (
     <div className="flex items-center gap-2 flex-col w-full pb-9">
-      <ModalLayer
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        mobileVariant="fullscreen"
-      >
+      <ModalLayer open={openModal} onClose={() => setOpenModal(false)} mobileVariant="fullscreen">
         <AddMatesModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>
 

@@ -1,6 +1,6 @@
 import { useDeviceHeight } from '@/hooks/useDeviceHeight';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { addDays, endOfMonth, format, isSameDay, startOfMonth } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';

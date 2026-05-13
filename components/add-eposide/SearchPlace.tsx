@@ -5,7 +5,7 @@ import { bffClient } from '@/lib/axios/instances';
 import KakaoMap from './KakaoMap';
 import Icon from '@common/Icon';
 import { ArrowBackIcon } from '@assets/icons';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { KakaoPlaceResponse } from '@/types/place.types';
 import Button from '@common/buttons/Button';
 import { PlaceBody } from '@type/episode.types';

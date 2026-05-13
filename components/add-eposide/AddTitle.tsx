@@ -1,5 +1,5 @@
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { BookmarkIcon } from '@assets/icons';
 import { ChangeEvent, useEffect } from 'react';
 import Icon from '@common/Icon';

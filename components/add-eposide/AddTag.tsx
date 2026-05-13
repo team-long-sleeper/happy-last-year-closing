@@ -2,7 +2,7 @@ import { TagIcon } from '@assets/icons';
 import Icon from '@components/common/Icon';
 import { useEffect, useState } from 'react';
 import TagsOptiopns from './TagsOptions';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import Tag from '@components/common/tag';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
 

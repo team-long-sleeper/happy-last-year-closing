@@ -4,7 +4,7 @@ import { useState } from 'react';
 import MatesProfileList from './MatesProfileList';
 import SearchMates from './SearchMates';
 import { Mate } from '@/types/mates.types';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { ModalDefaultProps } from '@/types/modal.types';
 import Button from '@components/common/buttons/Button';
 

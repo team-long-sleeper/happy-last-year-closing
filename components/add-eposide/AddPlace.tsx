@@ -4,7 +4,7 @@ import ModalLayer from '@common/modal';
 import { useEffect, useState } from 'react';
 import AddPlaceModal from './AddPlaceModal';
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 
 export default function AddPlace() {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -25,11 +25,7 @@ export default function AddPlace() {
 
   return (
     <div className="flex items-center gap-4 pl-16 pr-5 pb-9">
-      <ModalLayer
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        mobileVariant="fullscreen"
-      >
+      <ModalLayer open={openModal} onClose={() => setOpenModal(false)} mobileVariant="fullscreen">
         <AddPlaceModal closeModal={() => setOpenModal(false)} />
       </ModalLayer>
       <Icon icon={PlaceIcon} />

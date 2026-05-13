@@ -1,7 +1,7 @@
 import { tagsKeys } from '@/query/key/tags';
 import useGetTagsQuery from '@/query/tags/useGetTags.query';
 import { useTagCreateMutation } from '@/query/tags/useTags.mutation';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import Tag from '@components/common/tag';
 import TagList from '@components/common/tag/TagList';
 import { useQueryClient } from '@tanstack/react-query';
