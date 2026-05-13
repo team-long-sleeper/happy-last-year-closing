@@ -109,9 +109,9 @@ export default function AddEpisode({ params }: { params: Promise<{ id?: string[]
   const label = isEdit ? '수정' : '기록';
 
   return (
-    <div className="h-dvh overflow-hidden">
+    <div className="h-dvh overflow-hidden flex flex-col">
       <Header title="에피소드 추가하기" />
-      <div className="overflow-y-scroll h-full md:pb-52">
+      <div className="overflow-y-scroll flex-1 pb-20">
         <AddDates />
         <AddPlace />
         <AddTitle />
