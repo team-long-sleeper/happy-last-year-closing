@@ -32,12 +32,12 @@ jobs:
               run: |
                   CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx' | wc -l)
                   echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
-                  if [ $CHANGED -gt 30 ]; then
-                      echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
-                      echo "skip=true" >> $GITHUB_OUTPUT
-                  else
-                      echo "변경된 파일: $CHANGED개"
-                  fi
+              #   if [ $CHANGED -gt 30 ]; then
+              #       echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
+              #       echo "skip=true" >> $GITHUB_OUTPUT
+              #   else
+              #       echo "변경된 파일: $CHANGED개"
+              #   fi
 
             - name: Claude Code Review
               if: steps.size_check.outputs.skip != 'true'
