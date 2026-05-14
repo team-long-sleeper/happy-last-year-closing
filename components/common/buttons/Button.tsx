@@ -1,6 +1,7 @@
 interface ButtonProps {
   isDisabled?: boolean;
   children: React.ReactNode;
+  isLoading?: boolean;
   onClickFunc?: () => void;
   isBottomBtn?: boolean;
   buttonType?: ButtonStyleType;
@@ -11,6 +12,7 @@ export type ButtonStyleType = 'PRIMARY' | 'TETIARY';
 export default function Button({
   children,
   onClickFunc,
+  isLoading = false,
   isDisabled = false,
   isBottomBtn = false,
   buttonType = 'PRIMARY',
@@ -21,11 +23,12 @@ export default function Button({
     TETIARY:
       'bg-white border-gray-200 text-default active:bg-gray-400 disabled:text-gray-50 disabled:bg-gray-100',
   };
+
   return (
     <button
       disabled={isDisabled}
       onClick={onClickFunc}
-      className={`${isBottomBtn ? 'fixed bottom-0' : ''} ${style[buttonType]}  border-2  py-4 w-full cursor-pointer disabled:bg-white  disabled:cursor-default`}
+      className={`${isBottomBtn ? 'fixed bottom-0' : ''} ${style[buttonType]}  border-2  py-4 w-full cursor-pointer  disabled:bg-white  disabled:cursor-default ${isLoading ? 'border-primary-accent! bg-primary-accent! disabled:text-gray-50! ' : ''}`}
     >
       {children}
     </button>

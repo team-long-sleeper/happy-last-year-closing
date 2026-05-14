@@ -1,4 +1,4 @@
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { toast } from '@/toast';
 import { CloseIcon, DeleteIcon } from '@assets/icons';
 import Icon from '@components/common/Icon';

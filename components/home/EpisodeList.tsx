@@ -11,6 +11,7 @@ import ModalLayer from '@components/common/modal';
 import DeleteCheckModal from './DeleteCheckModal';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import DateTitle from './DateTitle';
 
 export default function EpisodeList({ episodes }: EpisodeListRes) {
   const { getHandlers, position, close, isOpen, selectedEpisode } = useContextMenu();
@@ -30,7 +31,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
   };
 
   return (
-    <div className="w-full px-4">
+    <div>
       {selected && (
         <ModalLayer open={openModal} onClose={() => setOpenModal(false)}>
           <DeleteCheckModal
@@ -62,9 +63,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
             className="w-full flex flex-col items-center pt-10"
             {...getHandlers(item)}
           >
-            <div className="text-2xl text-primary pb-4 w-full">
-              {formatSingleDate(new Date(item.date), 'number')}
-            </div>
+            <DateTitle date={new Date(item.date)} />
 
             <div className="flex flex-col gap-1 w-full pb-2">
               <div className="text-primary">{item.title}</div>
@@ -74,22 +73,24 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
                   <Icon icon={PlaceIcon} iconColor="text-default" size="s" />
                   {item.place.name}
                 </div>
-
-                <div className="border-l h-3 border-text-default/40" />
-
-                <div className="flex items-center gap-1">
-                  <Icon icon={MateIcon} size="s" iconColor="text-default" />
-                  <div>
-                    {item.mates.map((mate, index) => {
-                      return (
-                        <span key={mate.id}>
-                          {mate.name}
-                          {index !== item.mates.length - 1 ? `, ` : ''}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
+                {item.mates.length > 0 ? (
+                  <>
+                    <div className="border-l h-3 border-text-default/40" />
+                    <div className="flex items-center gap-1">
+                      <Icon icon={MateIcon} size="s" iconColor="text-default" />
+                      <div>
+                        {item.mates.map((mate, index) => {
+                          return (
+                            <span key={mate.id}>
+                              {mate.name}
+                              {index !== item.mates.length - 1 ? `, ` : ''}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
             <EpisodePicture images={item.pictures} />

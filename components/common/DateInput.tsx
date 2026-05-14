@@ -3,7 +3,7 @@
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { ko } from 'date-fns/locale';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import ModalLayer from '@common/modal';
 import { Modal } from './modal/template';
 import DatePicker from './DatePicker';

@@ -56,17 +56,17 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
           <Icon icon={CloseIcon} />
         </div>
         <div className="pt-10 px-4">
-          {MENU_TABS.map(({ label, icon, abled, link }) => (
-            <Link
-              onClick={onClose}
-              key={label}
-              href={link}
-              className={`${!abled ? 'pointer-events-none' : ''}`}
-              aria-disabled={!abled}
-            >
-              <List label={label} icon={icon} isDisabled={!abled} />
-            </Link>
-          ))}
+          {MENU_TABS.map(({ label, icon, abled, link }) =>
+            abled ? (
+              <Link onClick={onClose} key={label} href={link}>
+                <List label={label} icon={icon} isDisabled={!abled} />
+              </Link>
+            ) : (
+              <div key={label} aria-disabled="true">
+                <List label={label} icon={icon} isDisabled={!abled} />
+              </div>
+            ),
+          )}
         </div>
         <div className="absolute px-4 bottom-6 w-full flex flex-col gap-2">
           {DOCS.map(({ label, link }) => (

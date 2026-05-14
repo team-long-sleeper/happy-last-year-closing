@@ -33,7 +33,7 @@ export const EpisodePictureSchema = z.object({
 });
 
 export interface CreateEpisodeRes {
-  id: string;
+  id: number;
 }
 
 const PlaceSchema = z.object({
@@ -89,6 +89,18 @@ export const EpisodeUpdateReqSchema = EpisodeCreateReqSchema.extend({
   pictures: updatePictureReq,
 });
 
+export type CreateEpisodeInput = {
+  newImages: { file: File; order: number }[];
+  body: Omit<EpisodeReqBody, 'pictures'>;
+};
+
+export type UpdateEpisodeInput = {
+  id: string;
+  newImages: { file: File; order: number }[];
+  originalImages: { type: 'exists'; id: number; order: number }[];
+  body: Omit<EpisodeReqBody, 'pictures'>;
+};
+
 export const EpisodeResSchema = z.object({
   id: z.string(),
   title: z.string().min(1),
@@ -120,10 +132,21 @@ export const DeleteEpisodeSchema = z.object({
   id: z.number(),
 });
 
+export const EpisodeUpdateRequestSchema = z.object({
+  id: z.string(),
+  episodeBody: EpisodeUpdateReqSchema,
+});
+
+export const EpisodeUpdateResponseSchema = z.object({
+  id: z.number(),
+});
+
 export type EpisodeReqBody = z.infer<typeof EpisodeCreateReqSchema>;
 export type PlaceBody = z.infer<typeof PlaceSchema>;
 
 export type EpisodeUpdateReqBody = z.infer<typeof EpisodeUpdateReqSchema>;
+export type EpisodeUpdateReq = z.infer<typeof EpisodeUpdateRequestSchema>;
+export type EpisodeUpdateRes = z.infer<typeof EpisodeUpdateResponseSchema>;
 
 export type EpisodeListRes = z.infer<typeof EpisodeListResSchema>;
 export type EpisodeType = z.infer<typeof EpisodeResSchema>;

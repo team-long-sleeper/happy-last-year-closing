@@ -1,5 +1,5 @@
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import { ChangeEvent, useEffect } from 'react';
 
 export default function AddMemo() {
