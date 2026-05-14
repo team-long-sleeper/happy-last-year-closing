@@ -1,17 +1,101 @@
 [[redirects]]
+  from = "/*.zip"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tar"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tar.gz"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tgz"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tar.bz2"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.tar.xz"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.7z"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.rar"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.sql"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.sql.gz"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.sql.bz2"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.gz"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.bz2"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.zst"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.env"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
   from = "/wp-admin/*"
   to = "/404"
   status = 404
   force = true
 
 [[redirects]]
-  from = "/*.env*"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/*.aws/*"
+  from = "/wp-login*"
   to = "/404"
   status = 404
   force = true
