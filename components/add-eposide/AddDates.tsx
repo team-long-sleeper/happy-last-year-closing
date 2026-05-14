@@ -1,5 +1,5 @@
 import useGetEpisodeQuery from '@/query/episodes/useGetEpisode.query';
-import useEpisodeDataStore from '@/stores/add-/episodeDataStore';
+import useEpisodeDataStore from '@/stores/episodeDataStore';
 import useImageMetaData from '@/stores/imageMetaDataStore';
 import { CalendarIcon } from '@assets/icons';
 import DateInput, { formatSingleDate } from '@common/DateInput';

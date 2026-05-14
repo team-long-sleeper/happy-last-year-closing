@@ -1,35 +1,29 @@
-import { cookies } from 'next/headers';
+import { applySetCookie, proxyStreamToService } from '@/lib/serviceProxy';
 import { NextRequest, NextResponse } from 'next/server';
 
-const SERVICE_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token');
-
-  if (!accessToken) {
-    return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
-  }
-
-  const res = await fetch(`${SERVICE_BASE_URL}/episodes/pictures/${id}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken.value}`,
-    },
+  const { status, body, contentType, data, setCookie } = await proxyStreamToService(req, {
+    url: `/episodes/pictures/${id}`,
+    method: 'GET',
   });
 
-  if (!res.ok) {
-    return NextResponse.json({ message: 'Not found' }, { status: res.status });
+  if (status >= 400 || !body) {
+    return applySetCookie(
+      NextResponse.json(data ?? { message: 'Not found' }, { status }),
+      setCookie,
+    );
   }
 
-  const contentType = res.headers.get('content-type') ?? 'application/octet-stream';
-
-  return new NextResponse(res.body, {
-    status: 200,
-    headers: {
-      'Content-Type': contentType,
-      'Cache-Control': 'private, max-age=3600',
-    },
-  });
+  return applySetCookie(
+    new NextResponse(body, {
+      status,
+      headers: {
+        'Content-Type': contentType ?? 'application/octet-stream',
+        'Cache-Control': 'private, max-age=3600',
+      },
+    }),
+    setCookie,
+  );
 }

@@ -4,7 +4,7 @@ import {
   EpisodeItemRes,
   EpisodeListRes,
   EpisodeReqBody,
-  EpisodeUpdateReqBody,
+  EpisodeUpdateReq,
 } from '@/types/episode.types';
 
 class EpisodeService {
@@ -38,7 +38,7 @@ class EpisodeService {
       .catch((error) => console.log(error));
   }
 
-  async updateEpisode(id: string, episodeBody: EpisodeUpdateReqBody) {
+  async updateEpisode({ id, episodeBody }: EpisodeUpdateReq) {
     return await bffClient
       .patch(`/episodes/${id}`, { ...episodeBody })
       .then((response) => response.data)
