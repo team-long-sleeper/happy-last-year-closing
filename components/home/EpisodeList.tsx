@@ -73,22 +73,24 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
                   <Icon icon={PlaceIcon} iconColor="text-default" size="s" />
                   {item.place.name}
                 </div>
-
-                <div className="border-l h-3 border-text-default/40" />
-
-                <div className="flex items-center gap-1">
-                  <Icon icon={MateIcon} size="s" iconColor="text-default" />
-                  <div>
-                    {item.mates.map((mate, index) => {
-                      return (
-                        <span key={mate.id}>
-                          {mate.name}
-                          {index !== item.mates.length - 1 ? `, ` : ''}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
+                {item.mates.length > 0 ? (
+                  <>
+                    <div className="border-l h-3 border-text-default/40" />
+                    <div className="flex items-center gap-1">
+                      <Icon icon={MateIcon} size="s" iconColor="text-default" />
+                      <div>
+                        {item.mates.map((mate, index) => {
+                          return (
+                            <span key={mate.id}>
+                              {mate.name}
+                              {index !== item.mates.length - 1 ? `, ` : ''}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
             <EpisodePicture images={item.pictures} />
