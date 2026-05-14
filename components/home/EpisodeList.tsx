@@ -11,6 +11,7 @@ import ModalLayer from '@components/common/modal';
 import DeleteCheckModal from './DeleteCheckModal';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import DateTitle from './DateTitle';
 
 export default function EpisodeList({ episodes }: EpisodeListRes) {
   const { getHandlers, position, close, isOpen, selectedEpisode } = useContextMenu();
@@ -30,7 +31,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
   };
 
   return (
-    <div className="w-full px-4">
+    <div>
       {selected && (
         <ModalLayer open={openModal} onClose={() => setOpenModal(false)}>
           <DeleteCheckModal
@@ -62,9 +63,7 @@ export default function EpisodeList({ episodes }: EpisodeListRes) {
             className="w-full flex flex-col items-center pt-10"
             {...getHandlers(item)}
           >
-            <div className="text-2xl text-primary pb-4 w-full">
-              {formatSingleDate(new Date(item.date), 'number')}
-            </div>
+            <DateTitle date={new Date(item.date)} />
 
             <div className="flex flex-col gap-1 w-full pb-2">
               <div className="text-primary">{item.title}</div>
