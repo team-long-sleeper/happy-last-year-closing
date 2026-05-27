@@ -45,12 +45,8 @@ jobs:
               uses: anthropics/claude-code-action@v1
               with:
                   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-<<<<<<< Updated upstream
-                  show_full_output: true
-=======
                   model: claude-sonnet-4-6
                   max_turns: "15"
->>>>>>> Stashed changes
                   prompt: |
                         이 PR의 변경된 `.ts`, `.tsx`, `.js`, `.jsx` 파일만 코드 리뷰해줘.
 
