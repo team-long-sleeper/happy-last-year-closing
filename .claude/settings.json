@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "mcp__github__*"
+    ],
+    "deny": [
+      "Write(**)",
+      "Bash(rm*)",
+      "Bash(git push*)",
+      "Bash(git commit*)"
+    ]
+  }
+}
