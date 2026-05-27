@@ -33,20 +33,20 @@ jobs:
               run: |
                   CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx' | wc -l)
                   echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
-              #   if [ $CHANGED -gt 30 ]; then
-              #       echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
-              #       echo "skip=true" >> $GITHUB_OUTPUT
-              #   else
-              #       echo "변경된 파일: $CHANGED개"
-              #   fi
+                    if [ $CHANGED -gt 30 ]; then
+                        echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
+                        echo "skip=true" >> $GITHUB_OUTPUT
+                    else
+                        echo "변경된 파일: $CHANGED개"
+                    fi
 
             - name: Claude Code Review
               if: steps.size_check.outputs.skip != 'true'
               uses: anthropics/claude-code-action@v1
               with:
                   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-                  model: claude-sonnet-4-6
-                  max_turns: "15"
+                  claude_args: "--model claude-sonnet-4-6 --max-turns 15"
+                  classify_inline_comments: true
                   prompt: |
                         이 PR의 변경된 `.ts`, `.tsx`, `.js`, `.jsx` 파일만 코드 리뷰해줘.
 
