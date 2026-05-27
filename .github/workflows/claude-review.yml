@@ -33,28 +33,48 @@ jobs:
               run: |
                   CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx' | wc -l)
                   echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
-              #   if [ $CHANGED -gt 30 ]; then
-              #       echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
-              #       echo "skip=true" >> $GITHUB_OUTPUT
-              #   else
-              #       echo "변경된 파일: $CHANGED개"
-              #   fi
+                    if [ $CHANGED -gt 30 ]; then
+                        echo "::warning::PR이 너무 큽니다 ($CHANGED files). 리뷰 스킵."
+                        echo "skip=true" >> $GITHUB_OUTPUT
+                    else
+                        echo "변경된 파일: $CHANGED개"
+                    fi
 
             - name: Claude Code Review
               if: steps.size_check.outputs.skip != 'true'
               uses: anthropics/claude-code-action@v1
               with:
                   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-                  show_full_output: true
+                  claude_args: |
+                        --model claude-sonnet-4-6
+                        --max-turns 15
+                        --allowedTools "Read,Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),mcp__github_inline_comment__create_inline_comment"
                   prompt: |
-                      이 PR을 코드 리뷰해줘. `.claude/skills/react-next-review/SKILL.md` 에 있는 skill 기준을 따라서:
+                        REPO: ${{ github.repository }}
+                        PR NUMBER: ${{ github.event.pull_request.number }}        
+                        변경 내용은 `gh pr diff`로 확인해.
+                        이 PR의 변경된 `.ts`, `.tsx`, `.js`, `.jsx` 파일만 코드 리뷰해줘.
 
-                      1. 문제가 있는 라인에 GitHub inline comment 달아줘 (PR review comment 형식으로)
-                      2. 마지막에 전체 총평을 PR review summary로 작성해줘
-                         - ## 치명 (Critical) / ## 주요 (Major) / ## 어드바이스 (Advisory) 섹션으로 분류
-                         - 빈 섹션은 생략
-                         - Overall 단락으로 마무리
+                        문제 있는 라인은 반드시 `mcp__github_inline_comment__create_inline_comment`를 사용해서 inline comment로 작성해.
+                        inline comment 생성 시 `confirmed: true`를 사용해.
+                        전체 리뷰 요약은 반드시 `gh pr comment`로 작성해.
+                        문제가 없어도 "리뷰 기준에 해당하는 문제를 찾지 못했습니다." 라는 요약 comment는 남겨.
 
-                      리뷰 범위: 변경된 `.ts`, `.tsx`, `.js`, `.jsx` 파일만.
-                      스타일(들여쓰기, 세미콜론)은 지적하지 마.
-                      한국어로 작성해줘.
+                        리뷰 기준 (해당되는 항목만, 없으면 생략):
+                        1. 클라/서버 컴포넌트 경계: 서버 컴포넌트에서 useState/useEffect/onClick 사용, 불필요한 'use client', 클라이언트에서 서버 전용 모듈(fs, DB, env secret) import, async 클라이언트 컴포넌트
+                        2. useEffect 남용: 파생 상태를 useState+useEffect로 동기화 (useMemo로 대체 가능), 의존성 배열 누락
+                        3. 불필요한 리렌더링: 인라인 객체/함수를 자식 prop으로 전달, Context value를 useMemo 없이 전달
+                        4. TanStack Query: 문자열 캐시 키, 키에 파라미터 누락으로 캐시 충돌, invalidateQueries 과도 무효화
+                        5. 타입 허술: any 사용 (코멘트 없는 경우), as 단언 남발, 옵셔널체이닝+non-null assertion 혼용
+                        6. 접근성: div onClick → button, img alt 누락
+                        7. 컴포넌트 책임: 200줄 초과 + fetching·상태·렌더링 혼재 → custom hook 분리 제안
+
+                        심각도: 치명 (버그/런타임오류/보안) / 주요 (잘못된 패턴) / 어드바이스 (개선 제안)
+
+                        출력:
+                        1. 문제 있는 라인에 GitHub inline comment (PR review comment 형식)
+                        2. PR review summary:
+                           - ## 치명 / ## 주요 / ## 어드바이스 섹션 (빈 섹션 생략)
+                           - Overall 단락으로 마무리
+
+                        스타일(들여쓰기, 세미콜론)은 지적하지 마. 한국어로 작성해줘.
