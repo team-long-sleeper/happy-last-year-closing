@@ -46,8 +46,6 @@ jobs:
               with:
                   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
                   claude_args: "--model claude-sonnet-4-6 --max-turns 15"
-                  classify_inline_comments: true
-                  show_full_output: true
                   prompt: |
                         이 PR의 변경된 `.ts`, `.tsx`, `.js`, `.jsx` 파일만 코드 리뷰해줘.
 
