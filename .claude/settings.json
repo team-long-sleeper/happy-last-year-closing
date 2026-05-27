@@ -5,13 +5,19 @@
       "Bash(git diff*)",
       "Bash(git log*)",
       "Bash(git show*)",
-      "mcp__github__*"
+      "Bash(gh pr view*)",
+      "Bash(gh pr review*)",
+      "Bash(gh pr list*)",
+      "Bash(gh api*)"
     ],
     "deny": [
       "Write(**)",
+      "Edit(**)",
       "Bash(rm*)",
       "Bash(git push*)",
-      "Bash(git commit*)"
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git reset*)"
     ]
   }
 }
