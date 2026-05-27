@@ -5,6 +5,7 @@
       "Bash(git diff*)",
       "Bash(git log*)",
       "Bash(git show*)",
+      "Bash(grep*)",
       "Bash(gh pr view*)",
       "Bash(gh pr review*)",
       "Bash(gh pr list*)",
