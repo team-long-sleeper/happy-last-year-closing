@@ -2,7 +2,7 @@ name: Claude PR Review (Frontend)
 
 on:
     pull_request:
-        types: [ ready_for_review, synchronize ]
+        types: [ opened, ready_for_review, synchronize ]
         branches: [ dev ]
 
 jobs:
@@ -45,6 +45,7 @@ jobs:
               uses: anthropics/claude-code-action@v1
               with:
                   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+                  show_full_output: true
                   prompt: |
                       이 PR을 코드 리뷰해줘. `.claude/skills/react-next-review/SKILL.md` 에 있는 skill 기준을 따라서:
 
